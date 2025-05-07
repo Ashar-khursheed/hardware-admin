@@ -4,7 +4,7 @@ export const DashboardChartOptions = (data, convertCurrency) => {
             {
                 name: 'Revenue',
                 data: data?.revenues || [],
-                color: '#ec8951',
+                color: '#1e376c',
             },
             {
                 name: 'Comission',
