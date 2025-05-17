@@ -96,8 +96,10 @@ const SettingForm = ({ mutate, loading, title }) => {
         values["values"]["maintenance"]["start_date"] = dateSubmitValue(values["start_date"]);
         values["values"]["maintenance"]["end_date"] = dateSubmitValue(values["end_date"]);
         values["values"]["general"]["default_timezone"] = values["default_timezone"];
-        values["values"]["email"]["mail_mailer"] = values["mail_mailer"];
-        values["values"]["email"]["mail_encryption"] = values["mail_encryption"];
+// ✅ FIXED: Ensure 'email' object exists before setting mailer settings
+if (!values["values"]["email"]) {
+  values["values"]["email"] = {};
+}        values["values"]["email"]["mail_encryption"] = values["mail_encryption"];
         values["values"]["general"]["light_logo_image_id"] = values["light_logo_image_id"] ? values["light_logo_image_id"] : "";
         values["values"]["general"]["favicon_image_id"] = values["favicon_image_id"] ? values["favicon_image_id"] : "";
         values["values"]["general"]["dark_logo_image_id"] = values["dark_logo_image_id"] ? values["dark_logo_image_id"] : "";
