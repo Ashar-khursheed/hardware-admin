@@ -31,7 +31,105 @@ const Login = () => {
           <h4>{t("log_in_your_account")}</h4>
         </div>
         <div className="input-box">
-          <Formik
+
+               <Formik
+                                              initialValues={{
+                                                  email: "",
+                                                  password: "",
+                                              }}
+                                              validationSchema={YupObject({
+                                                  email: emailSchema,
+                                                  password: nameSchema,
+                                                  recaptcha: settingObj?.google_reCaptcha?.status ? recaptchaSchema : "",
+                                              })}
+                                              onSubmit={(values, actions) => {
+                                                  mutate(values, {
+                                                  onSuccess: () => {
+                                                      window.location.reload(); // ✅ Reload after successful login
+                                                  },
+                                                  onError: (error) => {
+                                                      setShowBoxMessage({
+                                                      type: "danger",
+                                                      message: error?.message || "Login failed",
+                                                      });
+                                                      actions.setSubmitting(false);
+                                                  },
+                                                  });
+                                              }}
+                                              >
+                                              {({ errors, touched, setFieldValue }) => (
+                                                  <Form className="row g-4">
+                                                  <Col sm="12">
+                                                      <Field
+                                                      inputprops={{ noExtraSpace: true }}
+                                                      autoComplete="email"
+                                                      name="email"
+                                                      type="email"
+                                                      component={ReactstrapInput}
+                                                      className="form-control"
+                                                      id="email"
+                                                      placeholder={t("email_address")}
+                                                      label={t("email_address")}
+                                                      />
+                                                  </Col>
+                                                  <Col sm="12">
+                                                      <Field
+                                                      inputprops={{ noExtraSpace: true }}
+                                                      name="password"
+                                                      type="password"
+                                                      component={ReactstrapInput}
+                                                      className="form-control"
+                                                      id="password"
+                                                      placeholder={t("password")}
+                                                      label={t("password")}
+                                                      />
+                                                  </Col>
+          
+                                                  {settingObj?.google_reCaptcha?.status && (
+                                                      <Col sm="12">
+                                                      <ReCAPTCHA
+                                                          ref={reCaptchaRef}
+                                                          sitekey={settingObj?.google_reCaptcha?.site_key}
+                                                          onChange={(value) => {
+                                                          setFieldValue("recaptcha", value);
+                                                          }}
+                                                      />
+                                                      {errors.recaptcha && touched.recaptcha && (
+                                                          <ErrorMessage
+                                                          name="recaptcha"
+                                                          render={(msg) => (
+                                                              <div className="invalid-feedback d-block">{msg}</div>
+                                                          )}
+                                                          />
+                                                      )}
+                                                      </Col>
+                                                  )}
+          
+                                                  <Col sm="12">
+                                                      <div className="forgot-box">
+                                                      <Link href={`/auth/forgot-password`} className="forgot-password">
+                                                          {t("forgot_password")}?
+                                                      </Link>
+                                                      </div>
+                                                  </Col>
+                                                  <Col sm="12">
+                                                      <Btn
+                                                      title="log_in"
+                                                      className="btn btn-animation w-100 justify-content-center"
+                                                      type="submit"
+                                                      color="false"
+                                                      loading={Number(isLoading)}
+                                                      />
+                                                      <div className="sign-up-box">
+                                                      <h4>{t("dont_account")}</h4>
+                                                      <Link href={`/auth/register`}>{t("sign_up")}</Link>
+                                                      </div>
+                                                  </Col>
+                                                  </Form>
+                                              )}
+                                              </Formik>
+          
+          {/* <Formik
             initialValues={{
               email: "",
               password: "",
@@ -79,7 +177,7 @@ const Login = () => {
                 </Col>
               </Form>
             )}
-          </Formik>
+          </Formik> */}
         </div>
       </LoginBoxWrapper>
     </div>
