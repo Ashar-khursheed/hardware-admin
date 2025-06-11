@@ -127,7 +127,7 @@ const Login = () => {
                                                   </Col>
                                                   </Form>
                                               )}
-                                              </Formik>
+                 </Formik>
           
           {/* <Formik
             initialValues={{
