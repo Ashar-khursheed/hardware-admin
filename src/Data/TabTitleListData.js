@@ -777,15 +777,15 @@ export const ElectronicsTwoSettingTitle = [
 export const ElectronicsTwoHomeBannerTitle = [{ title: "main_banner" }, { title: "home_banner1" }, { title: "home_banner2" }];
 
 export const ElectronicsThreeSettingTitle = [
-  { title: "home_banner", icon: <RiRecordCircleLine /> },
+  { title: "Main Slider", icon: <RiRecordCircleLine /> },
   { title: "services", icon: <RiRecordCircleLine /> },
-  { title: "ProductList1", icon: <RiRecordCircleLine /> },
-  { title: "banner", icon: <RiRecordCircleLine /> },
-  { title: "CategoryProduct1", icon: <RiRecordCircleLine /> },
-  { title: "OfferBanner1", icon: <RiRecordCircleLine /> },
-  { title: "OfferBanner2", icon: <RiRecordCircleLine /> },
-  { title: "CategoryProduct2", icon: <RiRecordCircleLine /> },
-  { title: "brand", icon: <RiRecordCircleLine /> },
+  { title: "Deals of the Day", icon: <RiRecordCircleLine /> },
+  { title: "Middle Banners", icon: <RiRecordCircleLine /> },
+  { title: "Category Tab Products ", icon: <RiRecordCircleLine /> },
+  { title: "Photography Banner", icon: <RiRecordCircleLine /> },
+  { title: "2 Banners", icon: <RiRecordCircleLine /> },
+  { title: "Recommended Products ", icon: <RiRecordCircleLine /> },
+  { title: "Brand Slider", icon: <RiRecordCircleLine /> },
 ];
 export const ElectronicThreeBannerTitle = [{ title: "main_banner" }, { title: "GridBanner1" }, { title: "GridBanner2" }, { title: "GridBanner3" }];
 export const ElectronicThreeProductList2Title = [{ title: "categories" }, { title: "products" }];
@@ -1009,7 +1009,7 @@ export const ChristmasHomePageSettingTitle = [
   { title: "OfferBanner1", icon: <RiRecordCircleLine /> },
   { title: "product_list", icon: <RiRecordCircleLine /> },
   { title: "OfferBanner2", icon: <RiRecordCircleLine /> },
-  { title: "CategoryProduct1", icon: <RiRecordCircleLine /> },
+  { title: "Categorywise Products Tab", icon: <RiRecordCircleLine /> },
   { title: "OfferBanner3", icon: <RiRecordCircleLine /> },
   { title: "CategoryProduct2", icon: <RiRecordCircleLine /> },
   { title: "featured_blogs", icon: <RiRecordCircleLine /> },
