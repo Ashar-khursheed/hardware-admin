@@ -45,5 +45,4 @@ Thumbs.db
 .idea/
 
 # npm packages
-package-lock.json
 yarn.lock
