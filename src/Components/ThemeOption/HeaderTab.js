@@ -113,14 +113,14 @@ const HeaderTab = ({ values, setFieldValue, categoryData }) => {
     }
   );
 
-  // Sync announcement data into form state
+  // Set default form values for announcement
   useEffect(() => {
     if (announcementData) {
       setFieldValue("announcement", {
-        status: !!announcementData?.status,
-        message: announcementData?.message || "",
-        background_color: announcementData?.background_color || "",
-        text_color: announcementData?.text_color || "",
+        status: !!announcementData.status,
+        message: announcementData.message || "",
+        background_color: announcementData.background_color || "",
+        text_color: announcementData.text_color || "",
       });
     }
   }, [announcementData]);
@@ -130,7 +130,7 @@ const HeaderTab = ({ values, setFieldValue, categoryData }) => {
   return (
     <Row>
       <Col sm="12">
-        {/* Header Style Selection */}
+        {/* Header Style */}
         <SearchableSelectInput
           nameList={[
             {
@@ -155,15 +155,20 @@ const HeaderTab = ({ values, setFieldValue, categoryData }) => {
           ]}
         />
 
-        {/* ✅ Announcement Section Above Sticky Header */}
-        {values?.announcement && (
+        {/* ✅ Announcement Section (Above Sticky Header) */}
+        {(values?.announcement || announcementData) && (
           <>
             <CheckBoxField
               name="[announcement][status]"
               title="Enable Announcement"
+              inputprops={{
+                defaultChecked:
+                  values?.announcement?.status ??
+                  Boolean(announcementData?.status),
+              }}
             />
 
-            {values?.announcement?.status && (
+            {(values?.announcement?.status || announcementData?.status) && (
               <>
                 <SimpleInputField
                   nameList={[
@@ -171,24 +176,44 @@ const HeaderTab = ({ values, setFieldValue, categoryData }) => {
                       name: "[announcement][message]",
                       title: "Announcement Message",
                       placeholder: "Enter announcement message",
+                      inputprops: {
+                        defaultValue:
+                          values?.announcement?.message ??
+                          announcementData?.message ??
+                          "",
+                      },
                     },
                   ]}
                 />
+
                 <SimpleInputField
                   nameList={[
                     {
                       name: "[announcement][background_color]",
                       title: "Background Color",
                       placeholder: "#ffff00",
+                      inputprops: {
+                        defaultValue:
+                          values?.announcement?.background_color ??
+                          announcementData?.background_color ??
+                          "",
+                      },
                     },
                   ]}
                 />
+
                 <SimpleInputField
                   nameList={[
                     {
                       name: "[announcement][text_color]",
                       title: "Text Color",
                       placeholder: "#000000",
+                      inputprops: {
+                        defaultValue:
+                          values?.announcement?.text_color ??
+                          announcementData?.text_color ??
+                          "",
+                      },
                     },
                   ]}
                 />
@@ -197,9 +222,15 @@ const HeaderTab = ({ values, setFieldValue, categoryData }) => {
           </>
         )}
 
-        {/* Sticky & Topbar */}
-        <CheckBoxField name="[options][header][sticky_header_enable]" title="sticky_header" />
-        <CheckBoxField name="[options][header][page_top_bar_enable]" title="topbar" />
+        {/* Sticky Header / Topbar */}
+        <CheckBoxField
+          name="[options][header][sticky_header_enable]"
+          title="sticky_header"
+        />
+        <CheckBoxField
+          name="[options][header][page_top_bar_enable]"
+          title="topbar"
+        />
 
         {/* Topbar Content */}
         {values["options"]?.["header"]?.["page_top_bar_enable"] &&
@@ -211,7 +242,8 @@ const HeaderTab = ({ values, setFieldValue, categoryData }) => {
                   name: `[options][header][top_bar_content]${i}[content]`,
                   title: `topbar_content_${i + 1}`,
                   placeholder: t("enter_top_bar_content"),
-                  helpertext: "*Utilize HTML tags for custom content presentation.",
+                  helpertext:
+                    "*Utilize HTML tags for custom content presentation.",
                 },
               ]}
             />
@@ -228,12 +260,12 @@ const HeaderTab = ({ values, setFieldValue, categoryData }) => {
           ]}
         />
 
-        {/* Category Multi-select */}
+        {/* Category Select */}
         <MultiSelectField
           values={values}
           setFieldValue={setFieldValue}
           name="headerCategories"
-          title="categories"
+          title={"categories"}
           data={categoryData || []}
         />
       </Col>
