@@ -75,6 +75,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { Col, Row } from "reactstrap";
+import { useEffect } from "react";
 
 import request from "../../Utils/AxiosUtils";
 import { product, announcement } from "../../Utils/AxiosUtils/API";
@@ -115,6 +116,18 @@ const HeaderTab = ({ values, setFieldValue, categoryData }) => {
       select: (res) => res?.data?.data,
     }
   );
+
+  // Sync announcement data into form
+  useEffect(() => {
+    if (announcementData) {
+      setFieldValue("announcement", {
+        status: announcementData?.status || false,
+        message: announcementData?.message || "",
+        background_color: announcementData?.background_color || "",
+        text_color: announcementData?.text_color || "",
+      });
+    }
+  }, [announcementData]);
 
   if (isLoading || announcementLoading) return <Loader />;
 
@@ -168,15 +181,14 @@ const HeaderTab = ({ values, setFieldValue, categoryData }) => {
             ))}
 
           {/* Announcement Bar Section */}
-          {announcementData && (
+          {values?.announcement && (
             <>
               <CheckBoxField
                 name="[announcement][status]"
                 title="Enable Announcement"
-                inputprops={{ defaultChecked: Boolean(announcementData?.status) }}
               />
 
-              {announcementData?.status === 1 && (
+              {values?.announcement?.status && (
                 <>
                   <SimpleInputField
                     nameList={[
@@ -184,9 +196,6 @@ const HeaderTab = ({ values, setFieldValue, categoryData }) => {
                         name: "[announcement][message]",
                         title: "Announcement Message",
                         placeholder: "Enter message here...",
-                        inputprops: {
-                          defaultValue: announcementData?.message,
-                        },
                       },
                     ]}
                   />
@@ -196,9 +205,6 @@ const HeaderTab = ({ values, setFieldValue, categoryData }) => {
                         name: "[announcement][background_color]",
                         title: "Background Color",
                         placeholder: "#ffff00",
-                        inputprops: {
-                          defaultValue: announcementData?.background_color,
-                        },
                       },
                     ]}
                   />
@@ -208,9 +214,6 @@ const HeaderTab = ({ values, setFieldValue, categoryData }) => {
                         name: "[announcement][text_color]",
                         title: "Text Color",
                         placeholder: "#000000",
-                        inputprops: {
-                          defaultValue: announcementData?.text_color,
-                        },
                       },
                     ]}
                   />
