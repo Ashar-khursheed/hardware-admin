@@ -20,7 +20,7 @@ const AllProducts = ({ setFieldValue, values, dispatch, setCartData, CategoryDat
   const { sidebarOpen } = useContext(SettingContext);
   const router = useRouter()
   // Calling Product API
-  const { data, refetch, fetchStatus } = useQuery([product, getCategoryId], () => request({ url: product, params: { category_ids: getCategoryId || productParams.category_ids.join(','), search: productParams?.search, status: 1, paginate: 20, page } }, router), { refetchOnWindowFocus: false, select: (data) => data.data });
+  const { data, refetch, fetchStatus } = useQuery([product, getCategoryId], () => request({ url: product, params: { category_ids: getCategoryId || productParams.category_ids.join(','), search: productParams?.search, status: 1, paginate: 20, page } }, router), { refetchOnWindowFocus: false });
   useEffect(() => {
     if (productParams?.category_ids?.length) {
       setGetCategoryId("");
@@ -47,7 +47,7 @@ const AllProducts = ({ setFieldValue, values, dispatch, setCartData, CategoryDat
           {fetchStatus == "fetching" ?
             <POSSkeletonLoader /> : <div className="product-section mt-4">
               <Row xxl={4} md={3} sm={2} xs={1} className={`g-4 row-cols-md-3 row-cols-sm-2 row-cols-1 ${sidebarOpen ? 'row-cols-xxl-5 row-cols-lg-4' : 'row-cols-xxl-4'}`}>
-                {data?.data?.length > 0 ? data?.data?.map((item) => (
+                {data?.data?.length > 0 ? data.data.map((item) => (
                   <ShowProduct productData={item} key={item.id} setFieldValue={setFieldValue} values={values} dispatch={dispatch} setStateProduct={setStateProduct} />
 
                 ))
@@ -55,7 +55,7 @@ const AllProducts = ({ setFieldValue, values, dispatch, setCartData, CategoryDat
               </Row>
             </div>
           }
-          {data?.data?.length > 0 ? <Pagination current_page={data?.current_page} total={data?.total} per_page={data?.per_page} setPage={setPage} /> : null}
+          {data?.data?.length > 0 ?<Pagination current_page={data?.current_page} total={data?.total} per_page={data?.per_page} setPage={setPage} /> : null}
         </CardBody>
       </Card>
     </>
