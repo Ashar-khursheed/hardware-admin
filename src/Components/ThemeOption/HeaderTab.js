@@ -90,10 +90,6 @@ const HeaderTab = ({ values, setFieldValue, categoryData }) => {
   const { t } = useTranslation("common");
   const router = useRouter();
 
-  const handleClick = (val) => {
-    setFieldValue("[options][header][header_options]", val.value);
-  };
-
   // Fetch product data
   const { data: productData, isLoading } = useQuery(
     [product],
@@ -117,11 +113,11 @@ const HeaderTab = ({ values, setFieldValue, categoryData }) => {
     }
   );
 
-  // Sync announcement data into form
+  // Sync announcement data into form state
   useEffect(() => {
     if (announcementData) {
       setFieldValue("announcement", {
-        status: announcementData?.status || false,
+        status: !!announcementData?.status,
         message: announcementData?.message || "",
         background_color: announcementData?.background_color || "",
         text_color: announcementData?.text_color || "",
@@ -132,118 +128,116 @@ const HeaderTab = ({ values, setFieldValue, categoryData }) => {
   if (isLoading || announcementLoading) return <Loader />;
 
   return (
-    <>
-      <Row>
-        <Col sm="12">
-          {/* Header style selection */}
-          <SearchableSelectInput
-            nameList={[
-              {
+    <Row>
+      <Col sm="12">
+        {/* Header Style Selection */}
+        <SearchableSelectInput
+          nameList={[
+            {
+              name: "[options][header][header_options]",
+              title: "header_options",
+              inputprops: {
                 name: "[options][header][header_options]",
-                title: "header_options",
-                inputprops: {
-                  name: "[options][header][header_options]",
-                  id: "[options][header][header_options]",
-                  options: [
-                    { id: "header_one", name: "HeaderOne" },
-                    { id: "header_two", name: "HeaderTwo" },
-                    { id: "header_three", name: "HeaderThree" },
-                    { id: "header_four", name: "HeaderFour" },
-                    { id: "header_five", name: "HeaderFive" },
-                    { id: "header_six", name: "HeaderSix" },
-                    { id: "header_seven", name: "HeaderSeven" },
-                    { id: "header_eight", name: "HeaderEight" },
-                  ],
-                  defaultOption: "Select Header Style",
+                id: "[options][header][header_options]",
+                options: [
+                  { id: "header_one", name: "HeaderOne" },
+                  { id: "header_two", name: "HeaderTwo" },
+                  { id: "header_three", name: "HeaderThree" },
+                  { id: "header_four", name: "HeaderFour" },
+                  { id: "header_five", name: "HeaderFive" },
+                  { id: "header_six", name: "HeaderSix" },
+                  { id: "header_seven", name: "HeaderSeven" },
+                  { id: "header_eight", name: "HeaderEight" },
+                ],
+                defaultOption: "Select Header Style",
+              },
+            },
+          ]}
+        />
+
+        {/* ✅ Announcement Section Above Sticky Header */}
+        {values?.announcement && (
+          <>
+            <CheckBoxField
+              name="[announcement][status]"
+              title="Enable Announcement"
+            />
+
+            {values?.announcement?.status && (
+              <>
+                <SimpleInputField
+                  nameList={[
+                    {
+                      name: "[announcement][message]",
+                      title: "Announcement Message",
+                      placeholder: "Enter announcement message",
+                    },
+                  ]}
+                />
+                <SimpleInputField
+                  nameList={[
+                    {
+                      name: "[announcement][background_color]",
+                      title: "Background Color",
+                      placeholder: "#ffff00",
+                    },
+                  ]}
+                />
+                <SimpleInputField
+                  nameList={[
+                    {
+                      name: "[announcement][text_color]",
+                      title: "Text Color",
+                      placeholder: "#000000",
+                    },
+                  ]}
+                />
+              </>
+            )}
+          </>
+        )}
+
+        {/* Sticky & Topbar */}
+        <CheckBoxField name="[options][header][sticky_header_enable]" title="sticky_header" />
+        <CheckBoxField name="[options][header][page_top_bar_enable]" title="topbar" />
+
+        {/* Topbar Content */}
+        {values["options"]?.["header"]?.["page_top_bar_enable"] &&
+          values["options"]?.["header"]?.["top_bar_content"]?.map((elem, i) => (
+            <SimpleInputField
+              key={i}
+              nameList={[
+                {
+                  name: `[options][header][top_bar_content]${i}[content]`,
+                  title: `topbar_content_${i + 1}`,
+                  placeholder: t("enter_top_bar_content"),
+                  helpertext: "*Utilize HTML tags for custom content presentation.",
                 },
-              },
-            ]}
-          />
+              ]}
+            />
+          ))}
 
-          {/* Sticky & Topbar checkboxes */}
-          <CheckBoxField name="[options][header][sticky_header_enable]" title="sticky_header" />
-          <CheckBoxField name="[options][header][page_top_bar_enable]" title="topbar" />
+        {/* Support Number */}
+        <SimpleInputField
+          nameList={[
+            {
+              name: "[options][header][support_number]",
+              title: "support_number",
+              placeholder: t("enter_support_number"),
+            },
+          ]}
+        />
 
-          {/* Topbar content */}
-          {values["options"]?.["header"]?.["page_top_bar_enable"] &&
-            values["options"]?.["header"]?.["top_bar_content"]?.map((elem, i) => (
-              <SimpleInputField
-                key={i}
-                nameList={[
-                  {
-                    name: `[options][header][top_bar_content]${i}[content]`,
-                    title: `topbar_content_${i + 1}`,
-                    placeholder: t("enter_top_bar_content"),
-                    helpertext: "*Utilize HTML tags for custom content presentation.",
-                  },
-                ]}
-              />
-            ))}
-
-          {/* Announcement Bar Section */}
-          {values?.announcement && (
-            <>
-              <CheckBoxField
-                name="[announcement][status]"
-                title="Enable Announcement"
-              />
-
-              {values?.announcement?.status && (
-                <>
-                  <SimpleInputField
-                    nameList={[
-                      {
-                        name: "[announcement][message]",
-                        title: "Announcement Message",
-                        placeholder: "Enter message here...",
-                      },
-                    ]}
-                  />
-                  <SimpleInputField
-                    nameList={[
-                      {
-                        name: "[announcement][background_color]",
-                        title: "Background Color",
-                        placeholder: "#ffff00",
-                      },
-                    ]}
-                  />
-                  <SimpleInputField
-                    nameList={[
-                      {
-                        name: "[announcement][text_color]",
-                        title: "Text Color",
-                        placeholder: "#000000",
-                      },
-                    ]}
-                  />
-                </>
-              )}
-            </>
-          )}
-
-          {/* Support number */}
-          <SimpleInputField
-            nameList={[
-              {
-                name: "[options][header][support_number]",
-                title: "support_number",
-                placeholder: t("enter_support_number"),
-              },
-            ]}
-          />
-
-          {/* Category multi-select */}
-          <MultiSelectField
-            values={values}
-            setFieldValue={setFieldValue}
-            name="headerCategories"
-            title={"categories"}
-            data={categoryData || []}
-          />
-        </Col>
-      </Row>
-    </>
+        {/* Category Multi-select */}
+        <MultiSelectField
+          values={values}
+          setFieldValue={setFieldValue}
+          name="headerCategories"
+          title="categories"
+          data={categoryData || []}
+        />
+      </Col>
+    </Row>
   );
 };
 
