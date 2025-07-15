@@ -130,7 +130,7 @@ const HeaderTab = ({ values, setFieldValue, categoryData }) => {
           {/* ✅ ANNOUNCEMENT BAR SECTION (just like sticky header) */}
           <CheckBoxField
             name="[options][header][announcement][status]"
-            title="Enable Announcement"
+            title="Announcement"
           />
           <SimpleInputField
             nameList={[
