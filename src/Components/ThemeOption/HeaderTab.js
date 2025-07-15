@@ -1,9 +1,84 @@
+// import { useQuery } from "@tanstack/react-query";
+// import { useRouter } from "next/navigation";
+// import { useTranslation } from "react-i18next";
+// import { Col, Row } from "reactstrap";
+// import request from "../../Utils/AxiosUtils";
+// import { product , announcement} from "../../Utils/AxiosUtils/API";
+// import Loader from "../CommonComponent/Loader";
+// import CheckBoxField from "../InputFields/CheckBoxField";
+// import MultiSelectField from "../InputFields/MultiSelectField";
+// import SearchableSelectInput from "../InputFields/SearchableSelectInput";
+// import SimpleInputField from "../InputFields/SimpleInputField";
+
+// const HeaderTab = ({ values, setFieldValue, categoryData }) => {
+//   const { t } = useTranslation("common");
+//   const router = useRouter();
+//   const handleClick = (val) => {
+//     setFieldValue("[options][header][header_options]", val.value);
+//   };
+//   const { data, isLoading } = useQuery([product], () => request({ url: product, params: { status: 1 } }, router), { refetchOnWindowFocus: false, select: (res) => res?.data?.data });
+//   if (isLoading) return <Loader />;
+//   return (
+//     <>
+//       <Row>
+//         <Col sm="12">
+//           <SearchableSelectInput
+//             nameList={[
+//               {
+//                 name: "[options][header][header_options]",
+//                 title: "header_options",
+//                 inputprops: {
+//                   name: "[options][header][header_options]",
+//                   id: "[options][header][header_options]",
+//                   options: [
+//                     { id: "header_one", name: "HeaderOne" },
+//                     { id: "header_two", name: "HeaderTwo" },
+//                     { id: "header_three", name: "HeaderThree" },
+//                     { id: "header_four", name: "HeaderFour" },
+//                     { id: "header_five", name: "HeaderFive" },
+//                     { id: "header_six", name: "HeaderSix" },
+//                     { id: "header_seven", name: "HeaderSeven" },
+//                     { id: "header_eight", name: "HeaderEight" },
+//                   ],
+//                   defaultOption: "Select Header Style",
+//                 },
+//               },
+//             ]}
+//           />
+//           <CheckBoxField name="[options][header][sticky_header_enable]" title="sticky_header" />
+//           <CheckBoxField name="[options][header][page_top_bar_enable]" title="topbar" />
+//           {values["options"]?.["header"]?.["page_top_bar_enable"]
+//             ? values["options"]?.["header"]?.["top_bar_content"]?.map((elem, i) => (
+//                 <SimpleInputField
+//                   nameList={[
+//                     {
+//                       name: `[options][header][top_bar_content]${i}[content]`,
+//                       title: `topbar_content_${i + 1}`,
+//                       placeholder: t("enter_top_bar_content"),
+//                       helpertext: "*Utilize HTML tags for custom content presentation.",
+//                     },
+//                   ]}
+//                   key={i}
+//                 />
+//               ))
+//             : null}
+//           <SimpleInputField nameList={[{ name: "[options][header][support_number]", title: "support_number", placeholder: t("enter_support_number") }]} />
+//           <MultiSelectField values={values} setFieldValue={setFieldValue} name="headerCategories" title={"categories"} data={categoryData || []} />
+//         </Col>
+//       </Row>
+//     </>
+//   );
+// };
+
+// export default HeaderTab;
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { Col, Row } from "reactstrap";
+
 import request from "../../Utils/AxiosUtils";
-import { product } from "../../Utils/AxiosUtils/API";
+import { product, announcement } from "../../Utils/AxiosUtils/API";
+
 import Loader from "../CommonComponent/Loader";
 import CheckBoxField from "../InputFields/CheckBoxField";
 import MultiSelectField from "../InputFields/MultiSelectField";
@@ -13,15 +88,41 @@ import SimpleInputField from "../InputFields/SimpleInputField";
 const HeaderTab = ({ values, setFieldValue, categoryData }) => {
   const { t } = useTranslation("common");
   const router = useRouter();
+
   const handleClick = (val) => {
     setFieldValue("[options][header][header_options]", val.value);
   };
-  const { data, isLoading } = useQuery([product], () => request({ url: product, params: { status: 1 } }, router), { refetchOnWindowFocus: false, select: (res) => res?.data?.data });
-  if (isLoading) return <Loader />;
+
+  // Fetch product data
+  const { data: productData, isLoading } = useQuery(
+    [product],
+    () => request({ url: product, params: { status: 1 } }, router),
+    {
+      refetchOnWindowFocus: false,
+      select: (res) => res?.data?.data,
+    }
+  );
+
+  // Fetch announcement data
+  const {
+    data: announcementData,
+    isLoading: announcementLoading,
+  } = useQuery(
+    ["announcement"],
+    () => request({ url: announcement }, router),
+    {
+      refetchOnWindowFocus: false,
+      select: (res) => res?.data?.data,
+    }
+  );
+
+  if (isLoading || announcementLoading) return <Loader />;
+
   return (
     <>
       <Row>
         <Col sm="12">
+          {/* Header style selection */}
           <SearchableSelectInput
             nameList={[
               {
@@ -45,25 +146,98 @@ const HeaderTab = ({ values, setFieldValue, categoryData }) => {
               },
             ]}
           />
+
+          {/* Sticky & Topbar checkboxes */}
           <CheckBoxField name="[options][header][sticky_header_enable]" title="sticky_header" />
           <CheckBoxField name="[options][header][page_top_bar_enable]" title="topbar" />
-          {values["options"]?.["header"]?.["page_top_bar_enable"]
-            ? values["options"]?.["header"]?.["top_bar_content"]?.map((elem, i) => (
-                <SimpleInputField
-                  nameList={[
-                    {
-                      name: `[options][header][top_bar_content]${i}[content]`,
-                      title: `topbar_content_${i + 1}`,
-                      placeholder: t("enter_top_bar_content"),
-                      helpertext: "*Utilize HTML tags for custom content presentation.",
-                    },
-                  ]}
-                  key={i}
-                />
-              ))
-            : null}
-          <SimpleInputField nameList={[{ name: "[options][header][support_number]", title: "support_number", placeholder: t("enter_support_number") }]} />
-          <MultiSelectField values={values} setFieldValue={setFieldValue} name="headerCategories" title={"categories"} data={categoryData || []} />
+
+          {/* Topbar content */}
+          {values["options"]?.["header"]?.["page_top_bar_enable"] &&
+            values["options"]?.["header"]?.["top_bar_content"]?.map((elem, i) => (
+              <SimpleInputField
+                key={i}
+                nameList={[
+                  {
+                    name: `[options][header][top_bar_content]${i}[content]`,
+                    title: `topbar_content_${i + 1}`,
+                    placeholder: t("enter_top_bar_content"),
+                    helpertext: "*Utilize HTML tags for custom content presentation.",
+                  },
+                ]}
+              />
+            ))}
+
+          {/* Announcement Bar Section */}
+          {announcementData && (
+            <>
+              <CheckBoxField
+                name="[announcement][status]"
+                title="Enable Announcement"
+                inputprops={{ defaultChecked: Boolean(announcementData?.status) }}
+              />
+
+              {announcementData?.status === 1 && (
+                <>
+                  <SimpleInputField
+                    nameList={[
+                      {
+                        name: "[announcement][message]",
+                        title: "Announcement Message",
+                        placeholder: "Enter message here...",
+                        inputprops: {
+                          defaultValue: announcementData?.message,
+                        },
+                      },
+                    ]}
+                  />
+                  <SimpleInputField
+                    nameList={[
+                      {
+                        name: "[announcement][background_color]",
+                        title: "Background Color",
+                        placeholder: "#ffff00",
+                        inputprops: {
+                          defaultValue: announcementData?.background_color,
+                        },
+                      },
+                    ]}
+                  />
+                  <SimpleInputField
+                    nameList={[
+                      {
+                        name: "[announcement][text_color]",
+                        title: "Text Color",
+                        placeholder: "#000000",
+                        inputprops: {
+                          defaultValue: announcementData?.text_color,
+                        },
+                      },
+                    ]}
+                  />
+                </>
+              )}
+            </>
+          )}
+
+          {/* Support number */}
+          <SimpleInputField
+            nameList={[
+              {
+                name: "[options][header][support_number]",
+                title: "support_number",
+                placeholder: t("enter_support_number"),
+              },
+            ]}
+          />
+
+          {/* Category multi-select */}
+          <MultiSelectField
+            values={values}
+            setFieldValue={setFieldValue}
+            name="headerCategories"
+            title={"categories"}
+            data={categoryData || []}
+          />
         </Col>
       </Row>
     </>

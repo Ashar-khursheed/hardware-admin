@@ -6,6 +6,13 @@ export const verifyToken = "verify-token";
 export const updatePassword = "update-password";
 export const LogoutAPI = "/logout";
 
+//Annoucement
+export const announcement = "announcement";
+export const AnnouncementStoreAPI = "announcement"; // POST
+export const AnnouncementUpdateAPI = (id) => `announcement/${id}`; // PUT
+export const AnnouncementDeleteAPI = (id) => `announcement/${id}`; // DELETE
+
+
 // self data (get)
 export const selfData = "/self";
 export const updateProfile = "/updateProfile";
