@@ -2622,3 +2622,60 @@ table {
 //     }
 //   }
 // }
+
+/* Export Progress Modal Styles */
+.export-progress-modal {
+    .modal-content {
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal-body {
+        padding: 2rem;
+    }
+}
+
+.export-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #f8f9fa;
+
+    .text-primary {
+        color: #0d6efd !important;
+    }
+
+    .text-success {
+        color: #198754 !important;
+    }
+
+    .text-danger {
+        color: #dc3545 !important;
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.animate-bounce {
+    animation: bounce 1s infinite;
+}
+
+.progress {
+    height: 8px;
+    border-radius: 4px;
+
+    .progress-bar {
+        background: linear-gradient(90deg, #0d6efd, #6610f2);
+    }
+}
