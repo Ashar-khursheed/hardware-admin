@@ -112,12 +112,20 @@ const AllProducts = ({
 
         {/* ✅ Pagination (now receives correct props) */}
         {data?.data?.length > 0 && (
+          // <Pagination
+          //   current_page={data.current_page}
+          //   total={data.total}
+          //   per_page={data.per_page}
+          //   setPage={setPage}
+          // />
           <Pagination
-            current_page={data.current_page}
-            total={data.total}
-            per_page={data.per_page}
+            current_page={data?.current_page || 1} // if API returns current_page
+            total={data?.total || 0}               // total number of items
+            per_page={data?.per_page || 20}        // items per page
             setPage={setPage}
           />
+
+
         )}
       </CardBody>
     </Card>
