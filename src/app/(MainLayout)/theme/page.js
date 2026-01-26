@@ -1,4 +1,5 @@
 "use client";
+import { sanitizeUrl } from "@/Utils/CustomFunctions/SanitizeUrl";
 import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -8,7 +9,6 @@ import Loader from "@/Components/CommonComponent/Loader";
 import request from "@/Utils/AxiosUtils";
 import { theme } from "@/Utils/AxiosUtils/API";
 import usePermissionCheck from "@/Utils/Hooks/usePermissionCheck";
-
 import { useTranslation } from "react-i18next";
 import SettingContext from "@/Helper/SettingContext";
 import { storageURL } from "@/Utils/Constants";
@@ -54,12 +54,12 @@ const Theme = () => {
                     }}
                   >
                     <a href={"#Javascript"}>
-                      <Image src={`${storageURL}/${theme.image}`.replace(/([^:]\/)\/+/g, "$1")} className="img-fluid bg-img bg_size_content" alt={theme?.name} height={1500} width={1500} />
-                    </a>
+                      <Image src={sanitizeUrl(`${storageURL}/${theme.image}`)} className="img-fluid bg-img bg_size_content" alt={theme?.name} height={1500} width={1500} />
+                    </a >
                     <a href={"#Javascript"} className="details-box">
                       {t("ThemeDetails")}
                     </a>
-                  </div>
+                  </div >
                   <div className="content-sec">
                     <h5>{theme.name}</h5>
                     {edit && (
@@ -68,13 +68,13 @@ const Theme = () => {
                       </a>
                     )}
                   </div>
-                </div>
-              </div>
+                </div >
+              </div >
             ))}
-          </Row>
-        </CardBody>
-      </Card>
-    </Col>
+          </Row >
+        </CardBody >
+      </Card >
+    </Col >
   );
 };
 

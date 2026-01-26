@@ -1,3 +1,4 @@
+import { sanitizeUrl } from "../../Utils/CustomFunctions/SanitizeUrl";
 import Image from "next/image";
 import { dateFormate } from "../../Utils/CustomFunctions/DateFormate";
 import TableWarper from "../../Utils/HOC/TableWarper";
@@ -14,8 +15,8 @@ const AllCategoriesTable = ({ data, ...props }) => {
     return data.map((item) => ({
       id: item.id,
       Name: item.name,
-      Image: <Image src={item.media?.filter((item) => item.collection_name == "image")[0]?.original_url ? item.media?.filter((item) => item.collection_name == "image")[0]?.original_url.replace(/([^:]\/)\/+/g, "$1") : PlaceHolderImage} height="100" width="100" alt={item.name} />,
-      Icon: <Image src={item.media?.filter((item) => item.collection_name == "icon")[0]?.original_url ? item.media?.filter((item) => item.collection_name == "icon")[0]?.original_url.replace(/([^:]\/)\/+/g, "$1") : PlaceHolderImage} height="100" width="100" alt={item.name} />,
+      Image: <Image src={sanitizeUrl(item.media?.filter((item) => item.collection_name == "image")[0]?.original_url) || PlaceHolderImage} height="100" width="100" alt={item.name} />,
+      Icon: <Image src={sanitizeUrl(item.media?.filter((item) => item.collection_name == "icon")[0]?.original_url) || PlaceHolderImage} height="100" width="100" alt={item.name} />,
       CreateAt: dateFormate(item.created_at),
       status: item.status,
     }));

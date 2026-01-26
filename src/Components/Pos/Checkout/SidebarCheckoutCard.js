@@ -1,3 +1,4 @@
+import { sanitizeUrl } from "@/Utils/CustomFunctions/SanitizeUrl";
 import SettingContext from '@/Helper/SettingContext';
 import Image from 'next/image';
 import { useContext } from 'react';
@@ -20,8 +21,8 @@ const SidebarCheckoutCard = ({ values }) => {
                         {values['products']?.map((item, i) => (
                             <li key={i}>
                                 <div className='checkout-product-list-box'>
-                                    <Image src={item?.variation && item?.variation?.variation_image ? (item?.variation?.variation_image?.original_url ? item.variation.variation_image.original_url.replace(/([^:]\/)\/+/g, "$1") : placeHolderImage)
-                                        : item?.product?.product_thumbnail ? (item?.product?.product_thumbnail?.original_url ? item.product.product_thumbnail.original_url.replace(/([^:]\/)\/+/g, "$1") : placeHolderImage)
+                                    <Image src={item?.variation && item?.variation?.variation_image ? (sanitizeUrl(item?.variation?.variation_image?.original_url) || placeHolderImage)
+                                        : item?.product?.product_thumbnail ? (sanitizeUrl(item?.product?.product_thumbnail?.original_url) || placeHolderImage)
                                             : placeHolderImage} className="img-fluid" alt={item?.product?.name || ''} width={70} height={70} />
                                     <div className="cart-content">
                                         <h4>{item?.variation ? item?.variation?.name : item?.product?.name}</h4>
@@ -30,13 +31,13 @@ const SidebarCheckoutCard = ({ values }) => {
                                         </h5>
                                         <h5 className='price'>{convertCurrency((item?.variation ? item?.variation.sale_price : item?.product?.sale_price) * (item.quantity))}</h5>
                                     </div>
-                                </div>
-                            </li>
+                                </div >
+                            </li >
                         ))}
-                    </ul>
+                    </ul >
                 </>
-            </div>
-        </CardBody>
+            </div >
+        </CardBody >
     )
 }
 

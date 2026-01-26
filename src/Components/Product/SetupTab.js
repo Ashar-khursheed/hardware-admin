@@ -1,3 +1,4 @@
+import { sanitizeUrl } from "../../Utils/CustomFunctions/SanitizeUrl";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import placeHolderImage from "../../../public/assets/images/placeholder.png";
@@ -80,7 +81,7 @@ const SetupTab = ({ values, setFieldValue, errors, updateId }) => {
         res?.data?.data
           .filter((elem) => (updateId ? elem?.id !== Number(updateId) : elem))
           .map((elem) => {
-            return { id: elem.id, name: elem.name, image: elem?.product_thumbnail?.original_url ? elem.product_thumbnail.original_url.replace(/([^:]\/)\/+/g, "$1") : placeHolderImage, slug: elem?.slug };
+            return { id: elem.id, name: elem.name, image: sanitizeUrl(elem?.product_thumbnail?.original_url) || placeHolderImage, slug: elem?.slug };
           }),
     }
   );

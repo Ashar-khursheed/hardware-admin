@@ -1,3 +1,4 @@
+import { sanitizeUrl } from "@/Utils/CustomFunctions/SanitizeUrl";
 import React, { useContext, useEffect } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
@@ -44,7 +45,7 @@ const PosDetailCard = ({ values, setFieldValue, initValues }) => {
               {values["products"]?.map((item, i) => (
                 <li key={i}>
                   <div className="cart-listing-box">
-                    <Image src={item?.variation && item?.variation?.variation_image ? (item?.variation?.variation_image?.original_url ? item.variation.variation_image.original_url.replace(/([^:]\/)\/+/g, "$1") : placeHolderImage) : item?.product?.product_thumbnail ? (item?.product?.product_thumbnail?.original_url ? item.product.product_thumbnail.original_url.replace(/([^:]\/)\/+/g, "$1") : placeHolderImage) : placeHolderImage} className="img-fluid" alt={item?.product?.name || ""} width={70} height={70} />
+                    <Image src={item?.variation && item?.variation?.variation_image ? (sanitizeUrl(item?.variation?.variation_image?.original_url) || placeHolderImage) : item?.product?.product_thumbnail ? (sanitizeUrl(item?.product?.product_thumbnail?.original_url) || placeHolderImage) : placeHolderImage} className="img-fluid" alt={item?.product?.name || ""} width={70} height={70} />
                     <div className="cart-content">
                       <h4>{item?.variation ? item?.variation?.name : item?.product?.name}</h4>
                       <div>
@@ -52,14 +53,14 @@ const PosDetailCard = ({ values, setFieldValue, initValues }) => {
                         {pathname !== "/checkout" && <IncDec item={item} deleteMutate={deleteMutate} addToCart={addToCart} values={values} setFieldValue={setFieldValue} />}
                       </div>
                     </div>
-                  </div>
-                </li>
+                  </div >
+                </li >
               ))}
-            </ul>
+            </ul >
           </>
         )}
-      </div>
-    </CardBody>
+      </div >
+    </CardBody >
   );
 };
 

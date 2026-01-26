@@ -1,3 +1,4 @@
+import { sanitizeUrl } from "@/Utils/CustomFunctions/SanitizeUrl";
 import NoDataFound from "@/Components/CommonComponent/NoDataFound";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -52,7 +53,7 @@ const ModalData = ({
     }
   };
   const getMimeTypeImage = (result) =>
-    mimeImageMapping[result?.mime_type] ?? (result?.original_url ? result.original_url.replace(/([^:]\/)\/+/g, "$1") : result?.original_url);
+    mimeImageMapping[result?.mime_type] ?? sanitizeUrl(result?.original_url);
 
   return (
     <>

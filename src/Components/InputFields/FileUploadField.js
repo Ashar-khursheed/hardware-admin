@@ -1,4 +1,5 @@
 import { ErrorMessage } from "formik";
+import { sanitizeUrl } from "../../Utils/CustomFunctions/SanitizeUrl";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { RiCloseLine } from "react-icons/ri";
@@ -85,12 +86,12 @@ const FileUploadField = ({ values, updateId, setFieldValue, errors, multiple, lo
 
     // If already full URL, return as-is but sanitize
     if (url.startsWith("http")) {
-      return url.replace(/([^:]\/)\/+/g, "$1");
+      return sanitizeUrl(url);
     }
 
     // Remove leading slashes to avoid //
     const joinedUrl = `${storageURL}/${url.replace(/^\/+/, "")}`;
-    return joinedUrl.replace(/([^:]\/)\/+/g, "$1");
+    return sanitizeUrl(joinedUrl);
   };
 
 

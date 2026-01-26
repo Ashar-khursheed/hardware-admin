@@ -1,3 +1,4 @@
+import { sanitizeUrl } from "@/Utils/CustomFunctions/SanitizeUrl";
 import React from "react";
 import { Input, Label } from "reactstrap";
 import NoDataFound from "../../CommonComponent/NoDataFound";
@@ -59,7 +60,7 @@ const AttachmentData = ({ state, dispatch, attachmentsData, refetch }) => {
                         <Label htmlFor={elem.id}>
                             <div className="ratio ratio-1x1">
                                 {elem.mime_type && elem.mime_type.startsWith('image') ? (
-                                    <Image src={elem.original_url ? elem.original_url.replace(/([^:]\/)\/+/g, "$1") : elem.original_url} className="img-fluid" alt="ratio image" height={130} width={130} />
+                                    <Image src={sanitizeUrl(elem.original_url)} className="img-fluid" alt="ratio image" height={130} width={130} />
                                 ) : (
                                     <Image src={getMimeTypeImage(elem.mime_type)} alt="attachment" className="img-fluid" height={130} width={130} />
                                 )}
