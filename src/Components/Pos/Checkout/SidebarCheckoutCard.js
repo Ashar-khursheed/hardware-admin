@@ -20,8 +20,8 @@ const SidebarCheckoutCard = ({ values }) => {
                         {values['products']?.map((item, i) => (
                             <li key={i}>
                                 <div className='checkout-product-list-box'>
-                                    <Image src={item?.variation && item?.variation?.variation_image ? item?.variation?.variation_image?.original_url
-                                        : item?.product?.product_thumbnail ? item?.product?.product_thumbnail?.original_url
+                                    <Image src={item?.variation && item?.variation?.variation_image ? (item?.variation?.variation_image?.original_url ? item.variation.variation_image.original_url.replace(/([^:]\/)\/+/g, "$1") : placeHolderImage)
+                                        : item?.product?.product_thumbnail ? (item?.product?.product_thumbnail?.original_url ? item.product.product_thumbnail.original_url.replace(/([^:]\/)\/+/g, "$1") : placeHolderImage)
                                             : placeHolderImage} className="img-fluid" alt={item?.product?.name || ''} width={70} height={70} />
                                     <div className="cart-content">
                                         <h4>{item?.variation ? item?.variation?.name : item?.product?.name}</h4>

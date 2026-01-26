@@ -17,7 +17,7 @@ const Theme = () => {
   const { t } = useTranslation("common");
   const [edit] = usePermissionCheck(["edit"]);
   const [activeTheme, setActiveTheme] = useState("");
-  const { settingObj } = useContext(SettingContext); 
+  const { settingObj } = useContext(SettingContext);
   const lang = settingObj?.general?.default_language?.locale
   const router = useRouter();
   const { data, isLoading, refetch } = useQuery([theme], () => request({ url: theme }), { refetchOnMount: false, select: (data) => data?.data?.data });
@@ -54,7 +54,7 @@ const Theme = () => {
                     }}
                   >
                     <a href={"#Javascript"}>
-                      <Image src={`${storageURL}/${theme.image}`} className="img-fluid bg-img bg_size_content" alt={theme?.name} height={1500} width={1500} />
+                      <Image src={`${storageURL}/${theme.image}`.replace(/([^:]\/)\/+/g, "$1")} className="img-fluid bg-img bg_size_content" alt={theme?.name} height={1500} width={1500} />
                     </a>
                     <a href={"#Javascript"} className="details-box">
                       {t("ThemeDetails")}

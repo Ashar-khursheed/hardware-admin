@@ -12,7 +12,7 @@ const ImageOtherAttributes = ({ setVariant, productState, elem, soldOutAttribute
             <li className={`${productState?.variantIds?.includes(item?.id) ? 'active' : ''} ${soldOutAttributesIds?.includes(item.id) ? 'disabled' : ''}`} title={item?.value}>
               {elem?.style == 'image' ? (
                 <Image
-                  src={item?.variation_image ? item?.variation_image?.original_url : placeHolderImage}
+                  src={item?.variation_image?.original_url ? item.variation_image.original_url.replace(/([^:]\/)\/+/g, "$1") : placeHolderImage}
                   onClick={() => setVariant(productState?.product?.variations, item)}
                   height={65}
                   width={65}

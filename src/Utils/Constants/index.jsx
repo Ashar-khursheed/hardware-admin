@@ -1,1 +1,1 @@
-export const storageURL = process.env.storageURL;
+export const storageURL = (process.env.STORAGE_URL || process.env.storageURL || "").replace(/\/+$/, "");
