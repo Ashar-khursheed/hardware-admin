@@ -105,7 +105,14 @@ const FileUploadField = ({ values, updateId, setFieldValue, errors, multiple, lo
                     result.hasOwnProperty('mime_type') ? (
                       <>
                         {result.mime_type && result.mime_type.startsWith('image') ? (
-                          <Image src={result.original_url} className="img-fluid" alt="ratio image" height={130} width={130} />
+                          <Image
+                            src={buildImageUrl(result.original_url)}
+                            className="img-fluid"
+                            alt="ratio image"
+                            height={130}
+                            width={130}
+                          />
+
                         ) : (
                           <Image src={getMimeTypeImage(result.mime_type)} alt="ratio image" className="img-fluid" height={130} width={130} />
                         )}
