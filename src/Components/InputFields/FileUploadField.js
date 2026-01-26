@@ -57,13 +57,13 @@ const FileUploadField = ({ values, updateId, setFieldValue, errors, multiple, lo
 
   let mimeImageMapping = [
     { mimeType: 'application/pdf', imagePath: PDFImages },
-    { mimeType: 'application/msword', imagePath:WordImages },
+    { mimeType: 'application/msword', imagePath: WordImages },
     { mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', imagePath: WordImages },
-    { mimeType: 'application/vnd.ms-excel', imagePath: XlsImages},
+    { mimeType: 'application/vnd.ms-excel', imagePath: XlsImages },
     { mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', imagePath: XlsImages },
     { mimeType: 'application/vnd.ms-powerpoint', imagePath: FolderImages },
     { mimeType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation', imagePath: FolderImages },
-    { mimeType: 'text/plain', imagePath: TxtImages},
+    { mimeType: 'text/plain', imagePath: TxtImages },
     { mimeType: 'audio/mpeg', imagePath: SoundImages },
     { mimeType: 'audio/wav', imagePath: SoundImages },
     { mimeType: 'audio/ogg', imagePath: SoundImages },
@@ -77,43 +77,64 @@ const FileUploadField = ({ values, updateId, setFieldValue, errors, multiple, lo
   let videoType = ['mp4', 'webm', 'ogg'];
 
   const getMimeTypeImage = (result) => {
-  return  mimeImageMapping.find(mime => mime?.mimeType === result)?.imagePath
-  } 
+    return mimeImageMapping.find(mime => mime?.mimeType === result)?.imagePath
+  }
+
+  const buildImageUrl = (url) => {
+    if (!url) return "";
+
+    // If already full URL, return as-is
+    if (url.startsWith("http")) {
+      return url;
+    }
+
+    // Remove leading slashes to avoid //
+    return `${storageURL}/${url.replace(/^\/+/, "")}`;
+  };
+
+
   const ImageShow = () => {
     return (
       <>
         {selectedImage?.length > 0 &&
           selectedImage?.map((result, i) => {
-            return(
-            <li key={i}>
-              <div className="media-img-box">
-                {
-                  result.hasOwnProperty('mime_type') ? (
-                    <>
-                      {result.mime_type && result.mime_type.startsWith('image') ? (
-                            <Image src={result.original_url} className="img-fluid" alt="ratio image" height={130} width={130} />
+            return (
+              <li key={i}>
+                <div className="media-img-box">
+                  {
+                    result.hasOwnProperty('mime_type') ? (
+                      <>
+                        {result.mime_type && result.mime_type.startsWith('image') ? (
+                          <Image src={result.original_url} className="img-fluid" alt="ratio image" height={130} width={130} />
                         ) : (
-                            <Image src={getMimeTypeImage(result.mime_type)} alt="ratio image" className="img-fluid" height={130} width={130} />
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      {videoType.includes(result?.original_url?.substring(result.original_url?.lastIndexOf('.') + 1)) ? 
-                        <Image src={VideoImages} alt="ratio image" className="img-fluid" height={130} width={130} />
-                      : 
-                      (
-                        <Image src={storageURL + result.original_url} alt="ratio image" className="img-fluid" height={130} width={130} />
-                      )} 
-                    </>
-                  )}
+                          <Image src={getMimeTypeImage(result.mime_type)} alt="ratio image" className="img-fluid" height={130} width={130} />
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        {videoType.includes(result?.original_url?.substring(result.original_url?.lastIndexOf('.') + 1)) ?
+                          <Image src={VideoImages} alt="ratio image" className="img-fluid" height={130} width={130} />
+                          :
+                          (
+                            <Image
+                              src={buildImageUrl(result.original_url)}
+                              alt="ratio image"
+                              className="img-fluid"
+                              height={130}
+                              width={130}
+                            />
+                          )}
+                      </>
+                    )}
 
-                <p className="remove-icon">
-                  <RiCloseLine onClick={() => removeImage(result)} />
-                </p>
-              </div>
-              <h6>{result?.file_name}</h6>
-            </li>
-          )})}
+                  <p className="remove-icon">
+                    <RiCloseLine onClick={() => removeImage(result)} />
+                  </p>
+                </div>
+                <h6>{result?.file_name}</h6>
+              </li>
+            )
+          })}
       </>
     );
   };
