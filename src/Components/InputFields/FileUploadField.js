@@ -83,13 +83,14 @@ const FileUploadField = ({ values, updateId, setFieldValue, errors, multiple, lo
   const buildImageUrl = (url) => {
     if (!url) return "";
 
-    // If already full URL, return as-is
+    // If already full URL, return as-is but sanitize
     if (url.startsWith("http")) {
-      return url;
+      return url.replace(/([^:]\/)\/+/g, "$1");
     }
 
     // Remove leading slashes to avoid //
-    return `${storageURL}/${url.replace(/^\/+/, "")}`;
+    const joinedUrl = `${storageURL}/${url.replace(/^\/+/, "")}`;
+    return joinedUrl.replace(/([^:]\/)\/+/g, "$1");
   };
 
 
