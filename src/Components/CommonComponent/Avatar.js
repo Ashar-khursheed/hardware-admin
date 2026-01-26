@@ -1,3 +1,4 @@
+import { sanitizeUrl } from "@/Utils/CustomFunctions/SanitizeUrl";
 import React from 'react';
 import Image from 'next/image';
 
@@ -7,7 +8,7 @@ const Avatar = ({ data, placeHolder, name, customeClass, height, width, noPrevCl
             {
                 data?.original_url ?
                     <div className={`${!noPrevClass ? 'user-profile' : ""} ${customeClass ? customeClass : ""}`}>
-                        <Image src={data?.original_url} className={`${customeClass ? customeClass : ""} ${imageClass ? imageClass : ""}`} height={height || 50} width={width || 50} alt={name?.name || ""} />
+                        <Image src={sanitizeUrl(data?.original_url) || placeHolder} className={`${customeClass ? customeClass : ""} ${imageClass ? imageClass : ""}`} height={height || 50} width={width || 50} alt={name?.name || ""} />
                     </div>
                     : placeHolder ?
                         <div className={`user-profile user-round ${customeClass ? customeClass : ""}`}>
