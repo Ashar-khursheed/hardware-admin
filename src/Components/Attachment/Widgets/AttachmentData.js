@@ -17,13 +17,13 @@ import AttachmentDeleteDropdown from "./AttachmentDeteleDropdown";
 const AttachmentData = ({ state, dispatch, attachmentsData, refetch }) => {
     let mimeImageMapping = [
         { mimeType: 'application/pdf', imagePath: PDFImages },
-        { mimeType: 'application/msword', imagePath:WordImages },
+        { mimeType: 'application/msword', imagePath: WordImages },
         { mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', imagePath: WordImages },
-        { mimeType: 'application/vnd.ms-excel', imagePath: XlsImages},
+        { mimeType: 'application/vnd.ms-excel', imagePath: XlsImages },
         { mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', imagePath: XlsImages },
         { mimeType: 'application/vnd.ms-powerpoint', imagePath: FolderImages },
         { mimeType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation', imagePath: FolderImages },
-        { mimeType: 'text/plain', imagePath: TxtImages},
+        { mimeType: 'text/plain', imagePath: TxtImages },
         { mimeType: 'audio/mpeg', imagePath: SoundImages },
         { mimeType: 'audio/wav', imagePath: SoundImages },
         { mimeType: 'audio/ogg', imagePath: SoundImages },
@@ -33,8 +33,8 @@ const AttachmentData = ({ state, dispatch, attachmentsData, refetch }) => {
         { mimeType: 'application/zip', imagePath: ZipImages },
         { mimeType: 'application/x-tar', imagePath: ZipImages },
         { mimeType: 'application/gzip', imagePath: ZipImages },
-      ];
-    
+    ];
+
     // Deleting the selected images from media module
     const ChoseImages = (e, item) => {
         let temp = [...state.deleteImage];
@@ -59,7 +59,7 @@ const AttachmentData = ({ state, dispatch, attachmentsData, refetch }) => {
                         <Label htmlFor={elem.id}>
                             <div className="ratio ratio-1x1">
                                 {elem.mime_type && elem.mime_type.startsWith('image') ? (
-                                    <Image src={elem.original_url} className="img-fluid" alt="ratio image" height={130} width={130} />
+                                    <Image src={elem.original_url ? elem.original_url.replace(/([^:]\/)\/+/g, "$1") : elem.original_url} className="img-fluid" alt="ratio image" height={130} width={130} />
                                 ) : (
                                     <Image src={getMimeTypeImage(elem.mime_type)} alt="attachment" className="img-fluid" height={130} width={130} />
                                 )}

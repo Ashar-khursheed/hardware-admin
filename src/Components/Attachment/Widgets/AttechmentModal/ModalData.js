@@ -52,7 +52,7 @@ const ModalData = ({
     }
   };
   const getMimeTypeImage = (result) =>
-    mimeImageMapping[result?.mime_type] ?? result?.original_url;
+    mimeImageMapping[result?.mime_type] ?? (result?.original_url ? result.original_url.replace(/([^:]\/)\/+/g, "$1") : result?.original_url);
 
   return (
     <>
@@ -65,7 +65,7 @@ const ModalData = ({
                 id={elem.id}
                 checked={
                   state?.selectedImage?.length > 0
-                    ? multiple ? selectedId?.includes(elem.id)? true: false: state.selectedImage.every((item) => (item.id == elem.id) || (elem.original_url === item.original_url ))
+                    ? multiple ? selectedId?.includes(elem.id) ? true : false : state.selectedImage.every((item) => (item.id == elem.id) || (elem.original_url === item.original_url))
                     : false
                 }
                 onChange={(e) => ChoseImages(e, elem)}
@@ -87,7 +87,7 @@ const ModalData = ({
       ) : (
         <NoDataFound noImage={false} title={"no_media_found"} />
       )}
-      {}
+      { }
     </>
   );
 };
