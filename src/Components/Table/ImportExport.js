@@ -25,7 +25,7 @@
 //             link.click();
 //             window.URL.revokeObjectURL(url);
 //         }
-//     }, false, 'blob')
+//     }, false, 'blob', 'get');
 //     const { mutate, isLoading } = useCreate(importExport?.importUrl, false, false, `${moduleName} added successfully`, (resDta) => {
 //         if (resDta?.status == 200 || resDta?.status == 201) {
 //             refetch();
@@ -134,7 +134,7 @@
 //         if (resDta?.status == 200 || resDta?.status == 201) {
 //             setExportProgress(100);
 //             setExportStatus('success');
-            
+
 //             const blob = new Blob([resDta?.data], { type: 'text/csv' });
 //             const url = window.URL.createObjectURL(blob);
 //             const link = document.createElement('a');
@@ -142,7 +142,7 @@
 //             link.download = `${moduleName.toLowerCase()}.csv`;
 //             link.click();
 //             window.URL.revokeObjectURL(url);
-            
+
 //             // Auto close after 2 seconds on success
 //             setTimeout(() => {
 //                 setExportModal(false);
@@ -159,7 +159,7 @@
 //         setExportModal(true);
 //         setExportStatus('loading');
 //         setExportProgress(0);
-        
+
 //         // Simulate progress while waiting for API
 //         const progressInterval = setInterval(() => {
 //             setExportProgress(prev => {
@@ -170,7 +170,7 @@
 //                 return prev + 10;
 //             });
 //         }, 200);
-        
+
 //         exportMutate({ ...importExport?.paramsProps }, {
 //             onError: () => {
 //                 clearInterval(progressInterval);
@@ -223,7 +223,7 @@
 //                             <p className="text-muted mb-0">{t("Please wait while we prepare your file")}</p>
 //                         </>
 //                     )}
-                    
+
 //                     {exportStatus === 'success' && (
 //                         <>
 //                             <div className="export-icon mb-3">
@@ -233,7 +233,7 @@
 //                             <p className="text-muted mb-0">{t("Your file has been downloaded")}</p>
 //                         </>
 //                     )}
-                    
+
 //                     {exportStatus === 'error' && (
 //                         <>
 //                             <div className="export-icon mb-3">
@@ -326,7 +326,7 @@ const ImportExport = ({ importExport, refetch, moduleName, exportButton, Dropdow
     const [exportModal, setExportModal] = useState(false);
     const [exportProgress, setExportProgress] = useState(0);
     const [exportStatus, setExportStatus] = useState('idle');
-    
+
     // Get queryClient to invalidate cache
     const queryClient = useQueryClient();
 
@@ -334,7 +334,7 @@ const ImportExport = ({ importExport, refetch, moduleName, exportButton, Dropdow
         if (resDta?.status == 200 || resDta?.status == 201) {
             setExportProgress(100);
             setExportStatus('success');
-            
+
             const blob = new Blob([resDta?.data], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -342,7 +342,7 @@ const ImportExport = ({ importExport, refetch, moduleName, exportButton, Dropdow
             link.download = `${moduleName.toLowerCase()}.csv`;
             link.click();
             window.URL.revokeObjectURL(url);
-            
+
             setTimeout(() => {
                 setExportModal(false);
                 setExportStatus('idle');
@@ -351,20 +351,20 @@ const ImportExport = ({ importExport, refetch, moduleName, exportButton, Dropdow
         } else {
             setExportStatus('error');
         }
-    }, false, 'blob');
+    }, false, 'blob', 'get');
 
     const { mutate, isLoading } = useCreate(importExport?.importUrl, false, false, `${moduleName} imported successfully`, (resDta) => {
         if (resDta?.status == 200 || resDta?.status == 201) {
             // CLEAR ALL CACHES related to this module
             queryClient.invalidateQueries();  // Invalidates ALL queries
-            
+
             // Or invalidate specific queries:
             // queryClient.invalidateQueries([url]);
             // queryClient.invalidateQueries(['product']);
-            
+
             // Also call refetch for immediate update
             refetch && refetch();
-            
+
             setModal(false);
         }
     });
@@ -374,7 +374,7 @@ const ImportExport = ({ importExport, refetch, moduleName, exportButton, Dropdow
         setExportModal(true);
         setExportStatus('loading');
         setExportProgress(0);
-        
+
         const progressInterval = setInterval(() => {
             setExportProgress(prev => {
                 if (prev >= 90) {
@@ -384,7 +384,7 @@ const ImportExport = ({ importExport, refetch, moduleName, exportButton, Dropdow
                 return prev + 10;
             });
         }, 200);
-        
+
         exportMutate({ ...importExport?.paramsProps }, {
             onError: () => {
                 clearInterval(progressInterval);
@@ -437,7 +437,7 @@ const ImportExport = ({ importExport, refetch, moduleName, exportButton, Dropdow
                             <p className="text-muted mb-0">{t("Please wait while we prepare your file")}</p>
                         </>
                     )}
-                    
+
                     {exportStatus === 'success' && (
                         <>
                             <div className="export-icon mb-3">
@@ -447,7 +447,7 @@ const ImportExport = ({ importExport, refetch, moduleName, exportButton, Dropdow
                             <p className="text-muted mb-0">{t("Your file has been downloaded")}</p>
                         </>
                     )}
-                    
+
                     {exportStatus === 'error' && (
                         <>
                             <div className="export-icon mb-3">
