@@ -351,7 +351,7 @@ const ImportExport = ({ importExport, refetch, moduleName, exportButton, Dropdow
         } else {
             setExportStatus('error');
         }
-    }, false, 'blob', 'get');
+    }, false, 'blob', 'post');
 
     const { mutate, isLoading } = useCreate(importExport?.importUrl, false, false, `${moduleName} imported successfully`, (resDta) => {
         if (resDta?.status == 200 || resDta?.status == 201) {
@@ -385,7 +385,11 @@ const ImportExport = ({ importExport, refetch, moduleName, exportButton, Dropdow
             });
         }, 200);
 
-        exportMutate({ ...importExport?.paramsProps }, {
+        const payload = importExport?.paramsProps ? Object.fromEntries(
+            Object.entries(importExport.paramsProps).filter(([_, v]) => v != null && v !== "")
+        ) : {};
+
+        exportMutate(payload, {
             onError: () => {
                 clearInterval(progressInterval);
                 setExportStatus('error');
