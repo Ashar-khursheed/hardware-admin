@@ -7,8 +7,9 @@ import SettingContext from "@/Helper/SettingContext";
 import Image from "next/image";
 import logoOne from '../../../public/assets/images/logo/1.png'
 import SearchBar from "./SearchBar";
+import { sanitizeUrl } from "@/Utils/CustomFunctions/SanitizeUrl";
 
-const Header = ({ setMode,mode, setLtr, settingData }) => {
+const Header = ({ setMode, mode, setLtr, settingData }) => {
   const { state, sidebarOpen, setSidebarOpen } = useContext(SettingContext);
   const [mounted, setMounted] = useState(true);
   const [openSearchBar, setOpenSearchBar] = useState(false)
@@ -27,7 +28,7 @@ const Header = ({ setMode,mode, setLtr, settingData }) => {
           </div>
           <ToggleButton setSidebarOpen={setSidebarOpen} />
           <a className="d-lg-none d-block mobile-logo" href="/">
-          {state?.setDarkLogo?.original_url &&  <Image src={state?.setDarkLogo?.original_url} height={21} width={120} alt="Dark Logo" />}
+            {state?.setDarkLogo?.original_url && <Image src={sanitizeUrl(state?.setDarkLogo?.original_url)} height={21} width={120} alt="Dark Logo" />}
           </a>
         </div>
         <SearchBar openSearchBar={openSearchBar} setOpenSearchBar={setOpenSearchBar} />
@@ -38,3 +39,4 @@ const Header = ({ setMode,mode, setLtr, settingData }) => {
 };
 
 export default Header;
+

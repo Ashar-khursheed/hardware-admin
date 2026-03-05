@@ -60,7 +60,7 @@ const AttachmentData = ({ state, dispatch, attachmentsData, refetch }) => {
                         <Label htmlFor={elem.id}>
                             <div className="ratio ratio-1x1">
                                 {elem.mime_type && elem.mime_type.startsWith('image') ? (
-                                    <Image src={sanitizeUrl(elem.original_url)} className="img-fluid" alt="ratio image" height={130} width={130} />
+                                    <Image src={sanitizeUrl(elem.original_url, 'product')} className="img-fluid" alt="ratio image" height={130} width={130} />
                                 ) : (
                                     <Image src={getMimeTypeImage(elem.mime_type)} alt="attachment" className="img-fluid" height={130} width={130} />
                                 )}

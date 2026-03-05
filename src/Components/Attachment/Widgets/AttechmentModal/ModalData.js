@@ -53,7 +53,7 @@ const ModalData = ({
     }
   };
   const getMimeTypeImage = (result) =>
-    mimeImageMapping[result?.mime_type] ?? sanitizeUrl(result?.original_url);
+    mimeImageMapping[result?.mime_type] ?? sanitizeUrl(result?.original_url, 'product');
 
   return (
     <>

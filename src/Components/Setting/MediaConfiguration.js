@@ -5,17 +5,17 @@ import SimpleInputField from "../InputFields/SimpleInputField";
 import { useTranslation } from "react-i18next";
 
 const MediaConfiguration = ({ values }) => {
-    
-    const { t } = useTranslation( 'common');
+
+  const { t } = useTranslation('common');
   return (
     <>
       <SearchableSelectInput
         nameList={[
           {
-            name: "media_disk",
+            name: "[values][media_configuration][media_disk]",
             title: "mailer",
             inputprops: {
-              name: "media_disk",
+              name: "[values][media_configuration][media_disk]",
               id: "media_disk",
               options: [
                 { id: "local", name: "local" },
@@ -26,14 +26,14 @@ const MediaConfiguration = ({ values }) => {
         ]}
       />
       {
-        values["media_disk"] === "s3" && 
+        values?.values?.media_configuration?.media_disk === "s3" &&
         <SimpleInputField
-        nameList={[
-          { name: "[values][media_configuration][aws_access_key_id]", title: t("aws_access_key_id"), placeholder: t("enter_aws_access_key_id") },
-          { name: "[values][media_configuration][aws_secret_access_key]", title: t("aws_secret_access_key"), placeholder: t("enter_aws_secret_access_key"),errormsg:"SiteName" },
-          { name: "[values][media_configuration][aws_bucket]", title: t("aws_bucket"), placeholder: t("enter_aws_bucket") },
-          { name: "[values][media_configuration][aws_default_region]", title: t("aws_default_region"), placeholder: t("enter_aws_default_region") },]}
-      /> 
+          nameList={[
+            { name: "[values][media_configuration][aws_access_key_id]", title: t("aws_access_key_id"), placeholder: t("enter_aws_access_key_id") },
+            { name: "[values][media_configuration][aws_secret_access_key]", title: t("aws_secret_access_key"), placeholder: t("enter_aws_secret_access_key"), errormsg: "SiteName" },
+            { name: "[values][media_configuration][aws_bucket]", title: t("aws_bucket"), placeholder: t("enter_aws_bucket") },
+            { name: "[values][media_configuration][aws_default_region]", title: t("aws_default_region"), placeholder: t("enter_aws_default_region") },]}
+        />
       }
     </>
   );

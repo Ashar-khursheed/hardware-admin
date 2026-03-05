@@ -24,7 +24,7 @@ const SettingForm = ({ mutate, loading, title }) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("1");
   const { data, isLoading, refetch } = useQuery([setting], () => request({ url: setting }, router), { enabled: false, refetchOnWindowFocus: false, select: (res) => res.data });
-  let IncludeList = ["status", "coupon_enable", "point_enable", "product_auto_approve", "stock_product_hide", "wallet_enable", "same_day_delivery", "is_category_based_commission", "multivendor", "sandbox_mode", "store_auto_approve", "maintenance_mode","zone_enable"];
+  let IncludeList = ["status", "coupon_enable", "point_enable", "product_auto_approve", "stock_product_hide", "wallet_enable", "same_day_delivery", "is_category_based_commission", "multivendor", "sandbox_mode", "store_auto_approve", "maintenance_mode", "zone_enable"];
   const RecursiveSet = ({ data }) => {
     if (data && typeof data == "object") {
       Object.keys(data).forEach((key) => {
@@ -69,13 +69,14 @@ const SettingForm = ({ mutate, loading, title }) => {
   });
   return (
     <Formik
-     validationSchema={validationSchema}
+      validationSchema={validationSchema}
       initialValues={{
         submitButtonClicked: false,
         // email: "",
         start_date: NewSettingsData ? NewSettingsData?.start_date || new Date() : new Date(),
         end_date: NewSettingsData ? NewSettingsData?.end_date || new Date() : new Date(),
-        media_disk: NewSettingsData?.media_configuration?.media_disk || "local",
+        media_disk: NewSettingsData?.media_configuration?.media_disk || "local", // kept for backward compat but field now nests under values
+
         light_logo_image: "",
         light_logo_image_id: "",
         dark_logo_image: "",
@@ -96,10 +97,10 @@ const SettingForm = ({ mutate, loading, title }) => {
         values["values"]["maintenance"]["start_date"] = dateSubmitValue(values["start_date"]);
         values["values"]["maintenance"]["end_date"] = dateSubmitValue(values["end_date"]);
         values["values"]["general"]["default_timezone"] = values["default_timezone"];
-// ✅ FIXED: Ensure 'email' object exists before setting mailer settings
-if (!values["values"]["email"]) {
-  values["values"]["email"] = {};
-}        values["values"]["email"]["mail_encryption"] = values["mail_encryption"];
+        // ✅ FIXED: Ensure 'email' object exists before setting mailer settings
+        if (!values["values"]["email"]) {
+          values["values"]["email"] = {};
+        } values["values"]["email"]["mail_encryption"] = values["mail_encryption"];
         values["values"]["general"]["light_logo_image_id"] = values["light_logo_image_id"] ? values["light_logo_image_id"] : "";
         values["values"]["general"]["favicon_image_id"] = values["favicon_image_id"] ? values["favicon_image_id"] : "";
         values["values"]["general"]["dark_logo_image_id"] = values["dark_logo_image_id"] ? values["dark_logo_image_id"] : "";
@@ -117,7 +118,7 @@ if (!values["values"]["email"]) {
             onSuccess: async (res) => {
               try {
                 const response = await request({
-                  url: `${process.env.URL}/translation/admin`,
+                  url: `/translation/admin`,
                   method: "GET",
                 });
               } catch (error) {

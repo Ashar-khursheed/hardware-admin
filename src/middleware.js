@@ -36,11 +36,16 @@ export async function middleware(request) {
       redirect: "follow",
     };
     let data;
-    if (!request.cookies.has("uat_multikart")) {
-      data = await (await fetch(process.env.API_PROD_URL + selfData, requestOptions))?.json();
-    } else {
-      data = await (await fetch(process.env.API_PROD_URL + selfData, requestOptions))?.json();
+    try {
+      const res = await fetch(process.env.API_PROD_URL + selfData, requestOptions);
+      const contentType = res.headers.get("content-type") || "";
+      if (res.ok && contentType.includes("application/json")) {
+        data = await res.json();
+      }
+    } catch (err) {
+      // API unavailable or returned non-JSON — continue without blocking navigation
     }
+
   }
 }
 

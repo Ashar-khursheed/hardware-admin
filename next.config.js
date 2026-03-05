@@ -51,10 +51,10 @@ const nextConfig = {
 
   env: {
     // Laravel API (Production)
-    API_PROD_URL: "https://api.in-sourceit.com/api/admin",
+    API_PROD_URL: "https://hardware.sparccpk.org/api/admin",
 
     // Storage base URL (NO trailing slash logic needed in frontend)
-    STORAGE_URL: "https://api.in-sourceit.com",
+    STORAGE_URL: "https://hardware.sparccpk.org",
   },
 
   redirects: async () => {
@@ -79,11 +79,24 @@ const nextConfig = {
         hostname: "127.0.0.1",
       },
 
-      // Production Laravel storage
+      // Production server — storage + frontend images
       {
         protocol: "https",
-        hostname: "api.in-sourceit.com",
-        pathname: "/storage/**",
+        hostname: "hardware.sparccpk.org",
+        pathname: "/**",
+      },
+
+      // S3 — product images (old uploads stored in /products/ prefix)
+      {
+        protocol: "https",
+        hostname: "hardware-website-images.s3.us-east-1.amazonaws.com",
+        pathname: "/products/**",
+      },
+      // S3 — other assets (logos, favicons etc stored as /{id}/{filename})
+      {
+        protocol: "https",
+        hostname: "hardware-website-images.s3.us-east-1.amazonaws.com",
+        pathname: "/**",
       },
     ],
   },

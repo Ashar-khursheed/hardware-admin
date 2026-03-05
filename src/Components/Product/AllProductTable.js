@@ -1,4 +1,4 @@
-import { useContext,useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { Approved, product } from "../../Utils/AxiosUtils/API";
 import TableWarper from "../../Utils/HOC/TableWarper";
 import ShowTable from "../Table/ShowTable";
@@ -11,11 +11,11 @@ import { useTranslation } from "react-i18next";
 import SettingContext from "@/Helper/SettingContext";
 
 const AllProductTable = ({ data, ...props }) => {
-  
-  const { t } = useTranslation( 'common');
+
+  const { t } = useTranslation('common');
   const [edit, destroy] = usePermissionCheck(["edit", "destroy"]);
-  const { role, setRole } = useContext(AccountContext) 
-  const { settingObj } = useContext(SettingContext); 
+  const { role, setRole } = useContext(AccountContext)
+  const { settingObj } = useContext(SettingContext);
   const language = settingObj?.general?.default_language?.locale
 
   useEffect(() => {
@@ -29,8 +29,8 @@ const AllProductTable = ({ data, ...props }) => {
     checkBox: true,
     isOption: edit == false && destroy == false ? false : true,
     noEdit: edit ? false : true,
-    isSerialNo:false,
-    optionHead: { title: "Action",show:"product",  type: 'download',modalTitle: t("download") },
+    isSerialNo: false,
+    optionHead: { title: "Action", show: "product", type: 'download', modalTitle: t("download") },
     column: [
       { title: "image", apiKey: "product_thumbnail", type: 'image', placeHolderImage: placeHolderImage },
       { title: "name", apiKey: "name", sorting: true, sortBy: "desc" },
@@ -43,7 +43,13 @@ const AllProductTable = ({ data, ...props }) => {
     ],
     data: data || []
   };
-  headerObj.data.map((element) => element.sale_price = element?.sale_price)
+  headerObj.data.map((element) => {
+    element.sale_price = element?.sale_price;
+    // Fallback: if no dedicated thumbnail, use first gallery image
+    if (!element.product_thumbnail && element.product_galleries?.length > 0) {
+      element.product_thumbnail = element.product_galleries[0];
+    }
+  });
 
   let pro = headerObj?.column?.filter((elem) => {
     return role == 'vendor' ? elem.title !== 'Approved' : elem;
@@ -51,7 +57,7 @@ const AllProductTable = ({ data, ...props }) => {
   headerObj.column = headerObj ? pro : [];
   if (!data) return <Loader />;
   return <>
-    <ShowTable {...props} headerData={headerObj} lang={language}/>
+    <ShowTable {...props} headerData={headerObj} lang={language} />
   </>
 };
 

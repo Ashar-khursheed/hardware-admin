@@ -1,27 +1,36 @@
-import { sanitizeUrl } from "@/Utils/CustomFunctions/SanitizeUrl";
-import React from 'react';
+"use client";
+import React, { useState } from 'react';
 import Image from 'next/image';
+import { sanitizeUrl } from "@/Utils/CustomFunctions/SanitizeUrl";
+import placeholderImg from "../../../public/assets/images/placeholder.png";
 
 const Avatar = ({ data, placeHolder, name, customeClass, height, width, noPrevClass, NameWithRound, imageClass }) => {
+    const [imgError, setImgError] = useState(false);
+    const fallback = placeHolder || placeholderImg;
+    const src = !imgError && data?.original_url ? sanitizeUrl(data.original_url, 'product') : fallback;
+
     return (
         <>
-            {
-                data?.original_url ?
-                    <div className={`${!noPrevClass ? 'user-profile' : ""} ${customeClass ? customeClass : ""}`}>
-                        <Image src={sanitizeUrl(data?.original_url) || placeHolder} className={`${customeClass ? customeClass : ""} ${imageClass ? imageClass : ""}`} height={height || 50} width={width || 50} alt={name?.name || ""} />
-                    </div>
-                    : placeHolder ?
-                        <div className={`user-profile user-round ${customeClass ? customeClass : ""}`}>
-                            <Image src={placeHolder} height={height || 50} width={width || 50} alt={name?.name} />
-                        </div>
-                        : NameWithRound ?
-                            <div className='user-round'>
-                                <h4>{name?.name?.charAt(0).toString().toUpperCase()}</h4>
-                            </div> :
-                            <h4>{name?.name?.charAt(0).toString().toUpperCase()}</h4>
-            }
+            {data?.original_url || placeHolder ? (
+                <div className={`${!noPrevClass ? 'user-profile' : ""} ${customeClass ? customeClass : ""}`}>
+                    <Image
+                        src={src}
+                        className={`${customeClass ? customeClass : ""} ${imageClass ? imageClass : ""}`}
+                        height={height || 50}
+                        width={width || 50}
+                        alt={name?.name || ""}
+                        onError={() => setImgError(true)}
+                    />
+                </div>
+            ) : NameWithRound ? (
+                <div className='user-round'>
+                    <h4>{name?.name?.charAt(0).toString().toUpperCase()}</h4>
+                </div>
+            ) : (
+                <h4>{name?.name?.charAt(0).toString().toUpperCase()}</h4>
+            )}
         </>
-    )
-}
+    );
+};
 
-export default Avatar
+export default Avatar;
