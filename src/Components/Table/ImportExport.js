@@ -335,13 +335,15 @@ const ImportExport = ({ importExport, refetch, moduleName, exportButton, Dropdow
             setExportProgress(100);
             setExportStatus('success');
 
-            const blob = new Blob([resDta?.data], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `${moduleName.toLowerCase()}.csv`;
-            link.click();
-            window.URL.revokeObjectURL(url);
+            const downloadUrl = resDta?.data?.url;
+            if (downloadUrl) {
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.setAttribute('download', `${moduleName.toLowerCase()}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
 
             setTimeout(() => {
                 setExportModal(false);
@@ -351,7 +353,7 @@ const ImportExport = ({ importExport, refetch, moduleName, exportButton, Dropdow
         } else {
             setExportStatus('error');
         }
-    }, false, 'blob', 'post');
+    }, false, '', 'post');
 
     const { mutate, isLoading } = useCreate(importExport?.importUrl, false, false, `${moduleName} imported successfully`, (resDta) => {
         if (resDta?.status == 200 || resDta?.status == 201) {
