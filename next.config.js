@@ -48,6 +48,14 @@
 const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
+  compress: true,
+  poweredByHeader: false,
+
+  // Keep more pages warm in memory during dev to reduce cold-compile time
+  onDemandEntries: {
+    maxInactiveAge: 60 * 1000,
+    pagesBufferLength: 5,
+  },
 
   env: {
     // Laravel API (Production)
@@ -68,6 +76,10 @@ const nextConfig = {
   },
 
   images: {
+    // Serve WebP for modern browsers — much smaller file sizes
+    formats: ["image/webp"],
+    // Cache optimized images on the server for 1 hour (default is 60s)
+    minimumCacheTTL: 3600,
     remotePatterns: [
       // Local development
       {

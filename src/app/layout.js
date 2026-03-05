@@ -10,7 +10,9 @@ import LanguageProvider from "@/Helper/LanguageContext/LanguageProvider";
 export async function generateMetadata() {
   let settingData = null;
   try {
-    const res = await fetch(`${process.env.API_PROD_URL}/settings`);
+    const res = await fetch(`${process.env.API_PROD_URL}/settings`, {
+      next: { revalidate: 300 }, // cache response server-side for 5 minutes
+    });
     const contentType = res.headers.get("content-type") || "";
     if (res.ok && contentType.includes("application/json")) {
       settingData = await res.json();

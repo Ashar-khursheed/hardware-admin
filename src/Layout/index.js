@@ -17,7 +17,7 @@ import { AllLanguageApi } from "@/Utils/AxiosUtils/API";
 const Layout = (props) => {
   const [mode, setMode] = useState(false);
   const [ltr, setLtr] = useState(true);
-  const { settingObj } = useContext(SettingContext); 
+  const { settingObj } = useContext(SettingContext);
   const { localLanguage } = useContext(LanguageContext);
 
   const router = useRouter();
@@ -41,19 +41,24 @@ const Layout = (props) => {
   //   // }
   // }, [data1]);
 
-  const { data } = useQuery(["newLang"], () => request({ url: AllLanguageApi }), {enabled: true,
+  const { data } = useQuery(["newLang"], () => request({ url: AllLanguageApi }), {
+    enabled: true,
     refetchOnWindowFocus: false,
-    refetchOnMount: false, select: (res) => res.data.data });
+    refetchOnMount: false,
+    // Language list rarely changes — cache for 5 minutes to avoid re-fetch on every page
+    staleTime: 5 * 60_000,
+    select: (res) => res.data.data,
+  });
 
-    useEffect(() => {
-      const lang = data?.find(lang => lang.locale === localLanguage)?.is_rtl
-      if(lang) {
-        if((settingObj?.general?.admin_site_language_direction === 'rtl') || !!settingObj?.general?.default_language?.is_rtl ){
-          (document.documentElement.dir = lang === 0 ? "ltr" : "rtl");
-        }else {
-          (document.documentElement.dir = lang === 0 ? "ltr" : "rtl")
-        }
+  useEffect(() => {
+    const lang = data?.find(lang => lang.locale === localLanguage)?.is_rtl
+    if (lang) {
+      if ((settingObj?.general?.admin_site_language_direction === 'rtl') || !!settingObj?.general?.default_language?.is_rtl) {
+        (document.documentElement.dir = lang === 0 ? "ltr" : "rtl");
+      } else {
+        (document.documentElement.dir = lang === 0 ? "ltr" : "rtl")
       }
+    }
   }, [settingObj, localLanguage]);
 
   return (

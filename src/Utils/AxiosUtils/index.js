@@ -1,9 +1,18 @@
 import axios from "axios";
+import http from "http";
+import https from "https";
 import Cookies from "js-cookie";
 import { fallbackLng } from "@/app/i18n/settings";
 
+// Reuse TCP connections across requests — reduces handshake latency
+const httpAgent = new http.Agent({ keepAlive: true });
+const httpsAgent = new https.Agent({ keepAlive: true });
+
 const client = axios.create({
   baseURL: process.env.API_PROD_URL,
+  timeout: 15000, // fail fast after 15 s instead of hanging indefinitely
+  httpAgent,
+  httpsAgent,
   headers: {
     Accept: "application/json",
   },
@@ -32,7 +41,7 @@ client.interceptors.request.use((config) => {
   return config;
 });
 
-const request = async ({ ...options }, router,headerOption) => {
+const request = async ({ ...options }, router, headerOption) => {
   const onSuccess = (response) => response;
   const onError = (error) => {
     if (error?.response?.status == 401) {
