@@ -8,7 +8,8 @@ const STORAGE_PATTERN = /https?:\/\/(?!hardware-website-images\.s3)[^/]+\/storag
  * @param {string} url
  * @param {'product'|'other'} type - 'product' stores under /products/, 'other' keeps /{id}/
  */
-export const sanitizeUrl = (url, type = 'other') => {
+export const sanitizeUrl = (data, type = 'other') => {
+    const url = (data && typeof data === 'object') ? (data.asset_url || data.original_url) : data;
     if (!url || typeof url !== 'string') return url;
 
     // Already an S3 URL — pass through untouched

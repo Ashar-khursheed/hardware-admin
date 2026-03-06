@@ -81,7 +81,7 @@ const SetupTab = ({ values, setFieldValue, errors, updateId }) => {
         res?.data?.data
           .filter((elem) => (updateId ? elem?.id !== Number(updateId) : elem))
           .map((elem) => {
-            return { id: elem.id, name: elem.name, image: sanitizeUrl(elem?.product_thumbnail?.original_url) || placeHolderImage, slug: elem?.slug };
+            return { id: elem.id, name: elem.name, image: sanitizeUrl(elem?.product_thumbnail || elem?.product_galleries?.[0]) || placeHolderImage, slug: elem?.slug };
           }),
     }
   );

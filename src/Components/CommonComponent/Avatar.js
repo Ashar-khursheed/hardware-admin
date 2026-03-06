@@ -7,11 +7,11 @@ import placeholderImg from "../../../public/assets/images/placeholder.png";
 const Avatar = ({ data, placeHolder, name, customeClass, height, width, noPrevClass, NameWithRound, imageClass }) => {
     const [imgError, setImgError] = useState(false);
     const fallback = placeHolder || placeholderImg;
-    const src = !imgError && data?.original_url ? sanitizeUrl(data.original_url, 'product') : fallback;
+    const src = !imgError && (data || placeHolder) ? sanitizeUrl(data || placeHolder, 'product') : fallback;
 
     return (
         <>
-            {data?.original_url || placeHolder ? (
+            {data || placeHolder ? (
                 <div className={`${!noPrevClass ? 'user-profile' : ""} ${customeClass ? customeClass : ""}`}>
                     <Image
                         src={src}

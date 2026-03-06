@@ -81,16 +81,19 @@ const FileUploadField = ({ values, updateId, setFieldValue, errors, multiple, lo
     return mimeImageMapping.find(mime => mime?.mimeType === result)?.imagePath
   }
 
-  const buildImageUrl = (url) => {
-    if (!url) return "";
+  const buildImageUrl = (data) => {
+    if (!data) return "";
 
-    // If already full URL, return as-is but sanitize
-    if (url.startsWith("http")) {
-      return sanitizeUrl(url);
+    // If it's an object with a full URL, use sanitizeUrl directly
+    const url = (data && typeof data === 'object') ? (data.asset_url || data.original_url) : data;
+    if (url && typeof url === 'string' && url.startsWith("http")) {
+      return sanitizeUrl(data);
     }
 
-    // Remove leading slashes to avoid //
-    const joinedUrl = `${storageURL}/${url.replace(/^\/+/, "")}`;
+    // Otherwise handle relative storage paths
+    const path = typeof data === 'string' ? data : (data?.original_url || "");
+    if (!path) return "";
+    const joinedUrl = `${storageURL}/${path.replace(/^\/+/, "")}`;
     return sanitizeUrl(joinedUrl);
   };
 
@@ -108,7 +111,7 @@ const FileUploadField = ({ values, updateId, setFieldValue, errors, multiple, lo
                       <>
                         {result.mime_type && result.mime_type.startsWith('image') ? (
                           <Image
-                            src={buildImageUrl(result.original_url)}
+                            src={buildImageUrl(result)}
                             className="img-fluid"
                             alt="ratio image"
                             height={130}
@@ -126,7 +129,7 @@ const FileUploadField = ({ values, updateId, setFieldValue, errors, multiple, lo
                           :
                           (
                             <Image
-                              src={buildImageUrl(result.original_url)}
+                              src={buildImageUrl(result)}
                               alt="ratio image"
                               className="img-fluid"
                               height={130}
