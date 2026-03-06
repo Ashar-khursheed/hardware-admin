@@ -15,7 +15,9 @@ const useCreate = (url, updateId, path = false, message, extraFunction, notHandl
       responseType: responseType ? responseType : "",
       params: isGet ? { ...params, ...data } : (params ? params : null),
       data: isGet ? null : data,
-      headers: { ...headerOption }
+      headers: { ...headerOption },
+      timeout: headerOption?.exportRequest ? 300000 : 15000, // ✅ 5 min for export, 15s for others
+
     };
     return request(finalOptions, router);
   },

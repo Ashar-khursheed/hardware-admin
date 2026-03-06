@@ -10,7 +10,7 @@ const httpsAgent = new https.Agent({ keepAlive: true });
 
 const client = axios.create({
   baseURL: process.env.API_PROD_URL,
-  timeout: 15000, // fail fast after 15 s instead of hanging indefinitely
+  timeout: 300000, // fail fast after 15 s instead of hanging indefinitely
   httpAgent,
   httpsAgent,
   headers: {
