@@ -23,113 +23,17 @@ const Login = () => {
   const reCaptchaRef = useRef();
 
   return (
-    <div className="box-wrapper">
+    <div className="box-wrapper w-100">
       <ShowBox showBoxMessage={showBoxMessage} />
-      <LoginBoxWrapper>
-        <div className="log-in-title text-center">
-          <Image className="for-white" src={state?.setDarkLogo?.original_url ? state?.setDarkLogo?.original_url : LogoImg} alt="Light Logo" width={140} height={28} priority />
-          <h4>{t("log_in_your_account")}</h4>
+      <div className="premium-login-box w-100">
+        <div className="log-in-title">
+          <Image className="for-white mb-4" src={state?.setDarkLogo?.original_url ? state?.setDarkLogo?.original_url : LogoImg} alt="Light Logo" width={140} height={40} style={{ objectFit: 'contain' }} priority />
+          <h4 className="fw-bold">{t("log_in_your_account")}</h4>
+          <p className="text-muted">Enter your credentials to securely access your admin dashboard.</p>
         </div>
         <div className="input-box">
 
-               <Formik
-                                              initialValues={{
-                                                  email: "",
-                                                  password: "",
-                                              }}
-                                              validationSchema={YupObject({
-                                                  email: emailSchema,
-                                                  password: nameSchema,
-                                                  recaptcha: settingObj?.google_reCaptcha?.status ? recaptchaSchema : "",
-                                              })}
-                                              onSubmit={(values, actions) => {
-                                                  mutate(values, {
-                                                  onSuccess: () => {
-                                                      window.location.reload(); // ✅ Reload after successful login
-                                                  },
-                                                  onError: (error) => {
-                                                      setShowBoxMessage({
-                                                      type: "danger",
-                                                      message: error?.message || "Login failed",
-                                                      });
-                                                      actions.setSubmitting(false);
-                                                  },
-                                                  });
-                                              }}
-                                              >
-                                              {({ errors, touched, setFieldValue }) => (
-                                                  <Form className="row g-4">
-                                                  <Col sm="12">
-                                                      <Field
-                                                      inputprops={{ noExtraSpace: true }}
-                                                      autoComplete="email"
-                                                      name="email"
-                                                      type="email"
-                                                      component={ReactstrapInput}
-                                                      className="form-control"
-                                                      id="email"
-                                                      placeholder={t("email_address")}
-                                                      label={t("email_address")}
-                                                      />
-                                                  </Col>
-                                                  <Col sm="12">
-                                                      <Field
-                                                      inputprops={{ noExtraSpace: true }}
-                                                      name="password"
-                                                      type="password"
-                                                      component={ReactstrapInput}
-                                                      className="form-control"
-                                                      id="password"
-                                                      placeholder={t("password")}
-                                                      label={t("password")}
-                                                      />
-                                                  </Col>
-          
-                                                  {settingObj?.google_reCaptcha?.status && (
-                                                      <Col sm="12">
-                                                      <ReCAPTCHA
-                                                          ref={reCaptchaRef}
-                                                          sitekey={settingObj?.google_reCaptcha?.site_key}
-                                                          onChange={(value) => {
-                                                          setFieldValue("recaptcha", value);
-                                                          }}
-                                                      />
-                                                      {errors.recaptcha && touched.recaptcha && (
-                                                          <ErrorMessage
-                                                          name="recaptcha"
-                                                          render={(msg) => (
-                                                              <div className="invalid-feedback d-block">{msg}</div>
-                                                          )}
-                                                          />
-                                                      )}
-                                                      </Col>
-                                                  )}
-          
-                                                  <Col sm="12">
-                                                      <div className="forgot-box">
-                                                      <Link href={`/auth/forgot-password`} className="forgot-password">
-                                                          {t("forgot_password")}?
-                                                      </Link>
-                                                      </div>
-                                                  </Col>
-                                                  <Col sm="12">
-                                                      <Btn
-                                                      title="log_in"
-                                                      className="btn btn-animation w-100 justify-content-center"
-                                                      type="submit"
-                                                      color="false"
-                                                      loading={Number(isLoading)}
-                                                      />
-                                                      <div className="sign-up-box">
-                                                      <h4>{t("dont_account")}</h4>
-                                                      <Link href={`/auth/register`}>{t("sign_up")}</Link>
-                                                      </div>
-                                                  </Col>
-                                                  </Form>
-                                              )}
-                 </Formik>
-          
-          {/* <Formik
+          <Formik
             initialValues={{
               email: "",
               password: "",
@@ -139,16 +43,54 @@ const Login = () => {
               password: nameSchema,
               recaptcha: settingObj?.google_reCaptcha?.status ? recaptchaSchema : "",
             })}
-            onSubmit={mutate}
-            >
+            onSubmit={(values, actions) => {
+              mutate(values, {
+                onSuccess: () => {
+                  window.location.reload(); // ✅ Reload after successful login
+                },
+                onError: (error) => {
+                  setShowBoxMessage({
+                    type: "danger",
+                    message: error?.message || "Login failed",
+                  });
+                  actions.setSubmitting(false);
+                },
+              });
+            }}
+          >
             {({ errors, touched, setFieldValue }) => (
               <Form className="row g-4">
                 <Col sm="12">
-                  <Field inputprops={{ noExtraSpace: true }} autoComplete={true}  name="email" type="email" component={ReactstrapInput} className="form-control" id="email" placeholder={t("email_address")} label={t("email_address")}/>
+                  <Field
+                    inputprops={{ noExtraSpace: true }}
+                    autoComplete="email"
+                    name="email"
+                    type="email"
+                    component={ReactstrapInput}
+                    className="form-control form-control-lg"
+                    id="email"
+                    placeholder={t("email_address")}
+                    label={t("email_address")}
+                  />
                 </Col>
                 <Col sm="12">
-                  <Field inputprops={{ noExtraSpace: true }} name="password" component={ReactstrapInput} type="password" className="form-control" id="password" placeholder={t("password")} label={t("password")} />
+                  <Field
+                    inputprops={{ noExtraSpace: true }}
+                    name="password"
+                    type="password"
+                    component={ReactstrapInput}
+                    className="form-control form-control-lg"
+                    id="password"
+                    placeholder={t("password")}
+                    label={t("password")}
+                  />
+                  <div className="forgot-box mt-2">
+                    <Link href={`/auth/forgot-password`} className="forgot-password">
+                      {t("forgot_password")}?
+                    </Link>
+                  </div>
                 </Col>
+
                 {settingObj?.google_reCaptcha?.status && (
                   <Col sm="12">
                     <ReCAPTCHA
@@ -158,28 +100,35 @@ const Login = () => {
                         setFieldValue("recaptcha", value);
                       }}
                     />
-                    {errors.recaptcha && touched.recaptcha && <ErrorMessage name="recaptcha" render={(msg) => <div className="invalid-feedback d-block">{errors.recaptcha}</div>} />}
+                    {errors.recaptcha && touched.recaptcha && (
+                      <ErrorMessage
+                        name="recaptcha"
+                        render={(msg) => (
+                          <div className="invalid-feedback d-block">{msg}</div>
+                        )}
+                      />
+                    )}
                   </Col>
                 )}
-                <Col sm="12">
-                  <div className="forgot-box">
-                    <Link href={`/auth/forgot-password`} className="forgot-password">
-                      {t("forgot_password")}?
-                    </Link>
-                  </div>
-                </Col>
-                <Col sm="12">
-                  <Btn title="log_in" className="btn btn-animation w-100 justify-content-center" type="submit" color="false" loading={Number(isLoading)} />
+
+                <Col sm="12" className="mt-4">
+                  <Btn
+                    title="log_in"
+                    className="btn-animation w-100 justify-content-center"
+                    type="submit"
+                    color="false"
+                    loading={Number(isLoading)}
+                  />
                   <div className="sign-up-box">
                     <h4>{t("dont_account")}</h4>
-                    <Link href={`/auth/register`}>{t('sign_up')}</Link>
+                    <Link href={`/auth/register`}>{t("sign_up")}</Link>
                   </div>
                 </Col>
               </Form>
             )}
-          </Formik> */}
+          </Formik>
         </div>
-      </LoginBoxWrapper>
+      </div>
     </div>
   );
 };
