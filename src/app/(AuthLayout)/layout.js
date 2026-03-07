@@ -1,7 +1,8 @@
 "use client";
 import { Col, Container, Row } from "reactstrap";
 import Image from "next/image";
-
+import authBg from "../../../public/assets/images/auth-bg.png";
+// import authBg from "../../../public/assets/images/add-image.png";
 const AuthLayout = ({ children }) => {
   return (
     <section className="log-in-section p-0">
@@ -9,7 +10,7 @@ const AuthLayout = ({ children }) => {
         <Row className="m-0 align-items-stretch">
           <Col xl="7" lg="6" className="p-0 d-none d-lg-block position-relative">
             <div className="auth-bg-section h-100 position-relative w-100">
-              <Image src="/assets/images/auth-bg.png" alt="Auth Background" layout="fill" objectFit="cover" quality={100} className="auth-bg-img" priority />
+              <Image src={authBg} alt="Auth Background" layout="fill" objectFit="cover" quality={100} className="auth-bg-img" priority />
               <div className="auth-bg-overlay">
                 <div className="auth-bg-content text-white">
                   <h1 className="fw-bold mb-3">Welcome to Hardware Admin</h1>
