@@ -27,8 +27,9 @@ const Login = () => {
       <ShowBox showBoxMessage={showBoxMessage} />
       <div className="premium-login-box w-100">
         <div className="log-in-title">
-          <Image className="for-white mb-4" src={state?.setDarkLogo?.original_url ? state?.setDarkLogo?.original_url : LogoImg} alt="Light Logo" width={140} height={40} style={{ objectFit: 'contain' }} priority />
-          <h4 className="fw-bold">{t("log_in_your_account")}</h4>
+          <Image className="for-white mb-4" src="https://hardware-website-images.s3.us-east-1.amazonaws.com/18264/Hardware-Box-Final-logo-red-03-1-1.webp" alt="Hardware Logo" width={140} height={40} style={{ objectFit: 'contain' }} priority />
+
+          <h4 className="fw-bold">{t("Login To Your Account")}</h4>
           <p className="text-muted">Enter your credentials to securely access your admin dashboard.</p>
         </div>
         <div className="input-box">
@@ -86,7 +87,7 @@ const Login = () => {
                   />
                   <div className="forgot-box mt-2">
                     <Link href={`/auth/forgot-password`} className="forgot-password">
-                      {t("forgot_password")}?
+                      {t("Forgot password")}?
                     </Link>
                   </div>
                 </Col>
@@ -120,8 +121,8 @@ const Login = () => {
                     loading={Number(isLoading)}
                   />
                   <div className="sign-up-box">
-                    <h4>{t("dont_account")}</h4>
-                    <Link href={`/auth/register`}>{t("sign_up")}</Link>
+                    <h4>{t("Don't have an account?")}</h4>
+                    <Link href={`/auth/register`}>{t("signup ")}</Link>
                   </div>
                 </Col>
               </Form>
