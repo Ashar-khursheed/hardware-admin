@@ -114,7 +114,7 @@ const Login = () => {
 
                 <Col sm="12" className="mt-4">
                   <Btn
-                    title="log_in"
+                    title="Log In"
                     className="btn-animation w-100 justify-content-center"
                     type="submit"
                     color="false"
@@ -122,7 +122,7 @@ const Login = () => {
                   />
                   <div className="sign-up-box">
                     <h4>{t("Don't have an account?")}</h4>
-                    <Link href={`/auth/register`}>{t("signup ")}</Link>
+                    <Link href={`/auth/register`}>{t("Sign Up ")}</Link>
                   </div>
                 </Col>
               </Form>
