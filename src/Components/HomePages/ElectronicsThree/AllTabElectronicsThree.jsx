@@ -4,7 +4,7 @@ import { product } from "@/Utils/AxiosUtils/API";
 import { useQuery } from "@tanstack/react-query";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { Col, TabContent, TabPane } from "reactstrap";
-import { concatDynamicProductKeys } from "../../../../Utils/CustomFunctions/concatDynamicProductKeys";
+import { concatDynamicProductKeys } from "@/Utils/CustomFunctions/concatDynamicProductKeys";
 import placeHolderImage from "../../../../public/assets/images/placeholder.png";
 import BannerTab from "./ElectronicsThreeTabs/BannerTab";
 import BrandTab from "./ElectronicsThreeTabs/BrandTab";

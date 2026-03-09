@@ -1,10 +1,10 @@
-import { concatDynamicProductKeys } from "../../../../Utils/CustomFunctions/concatDynamicProductKeys";
+import { concatDynamicProductKeys } from "@/Utils/CustomFunctions/concatDynamicProductKeys";
 
 const ElectronicsThreeSubmit = (values, mutate) => {
   values["content"]["products_ids"] = Array.from(new Set(concatDynamicProductKeys(values)));
 
   values["content"]["home_banner"]["banners"].forEach((elem, i) => {
- if (!values["content"]["home_banner"]["banners"][i]["redirect_link"]) {
+    if (!values["content"]["home_banner"]["banners"][i]["redirect_link"]) {
       values["content"]["home_banner"]["banners"][i]["redirect_link"] = {}; // Initialize redirect_link if undefined
     }
 
@@ -210,7 +210,7 @@ const ElectronicsThreeSubmit = (values, mutate) => {
   if (values["brandItems"]) {
     values["content"]["brand"]["brand_ids"] = values["brandItems"];
   }
-  
+
   const updatedValues = {
     ...values,
     content: {
