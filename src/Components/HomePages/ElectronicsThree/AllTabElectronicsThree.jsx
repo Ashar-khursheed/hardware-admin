@@ -4,6 +4,7 @@ import { product } from "@/Utils/AxiosUtils/API";
 import { useQuery } from "@tanstack/react-query";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { Col, TabContent, TabPane } from "reactstrap";
+import { concatDynamicProductKeys } from "../../../../Utils/CustomFunctions/concatDynamicProductKeys";
 import placeHolderImage from "../../../../public/assets/images/placeholder.png";
 import BannerTab from "./ElectronicsThreeTabs/BannerTab";
 import BrandTab from "./ElectronicsThreeTabs/BrandTab";
@@ -26,16 +27,16 @@ const AllTabsElectronicsThree = forwardRef(({ activeTab, values, setFieldValue, 
     isLoading: productLoader,
     refetch,
   } = useQuery(
-    [product],
+    [product, values],
     () =>
       request({
         url: product,
         params: {
           status: 1,
           search: customSearch ? customSearch : "",
-          paginate: values["content"]?.["products_ids"]?.length > 15 ? values["content"]?.["products_ids"]?.length : 15,
-          ids: customSearch ? null : values["content"]["products_ids"].join() || null,
-          with_union_products: values["content"]?.["products_ids"]?.length ? (values["content"]?.["products_ids"]?.length >= 15 ? 0 : 1) : 0,
+          paginate: Array.from(new Set(concatDynamicProductKeys(values))).length > 15 ? Array.from(new Set(concatDynamicProductKeys(values))).length : 15,
+          ids: customSearch ? null : Array.from(new Set(concatDynamicProductKeys(values))).join() || null,
+          with_union_products: Array.from(new Set(concatDynamicProductKeys(values))).length ? (Array.from(new Set(concatDynamicProductKeys(values))).length >= 15 ? 0 : 1) : 0,
         },
       }),
     {

@@ -30,7 +30,7 @@ const ReactstrapSelectInput = ({ field, form: { touched, errors, setFieldValue }
     } else {
       props.inputprops?.setsearch && props.inputprops?.setsearch(searchInput)
     }
-  }, [searchInput]);
+  }, [searchInput, props.inputprops.options]);
   // Memorized the value and update on option changes
   const listOpt = useMemo(() => {
     return props?.inputprops?.options
@@ -73,7 +73,7 @@ const ReactstrapSelectInput = ({ field, form: { touched, errors, setFieldValue }
     } else {
       !Array.isArray(field?.value) && setSelectedItems && setSelectedItems(list?.find((elem) => field?.value == elem[getValuesKey]))
     }
-  }, [])
+  }, [field?.value, list, listOpt])
 
   const RemoveSelectedItem = (id, item) => {
     if (props?.inputprops?.close) {
