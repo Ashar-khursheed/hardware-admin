@@ -59,10 +59,10 @@ const nextConfig = {
 
   env: {
     // Laravel API (Production)
-    API_PROD_URL: "https://www.admin.thehardwarebox.com/api/admin",
+    API_PROD_URL: "https://hardware.sparccpk.org/api/admin",
 
     // Storage base URL (NO trailing slash logic needed in frontend)
-    STORAGE_URL: "https://www.admin.thehardwarebox.com",
+    STORAGE_URL: "https://hardware.sparccpk.org",
   },
 
   redirects: async () => {
