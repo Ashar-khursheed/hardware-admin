@@ -12,7 +12,7 @@ import CheckoutCard from "./common/CheckoutCard";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
 
-const DeliveryAddress = ({ values, updateId, type, title }) => {
+const DeliveryAddress = ({ values, updateId, type, title, setFieldValue }) => {
   const router = useRouter()
   const { t } = useTranslation('common');
   const [modal, setModal] = useState(false);
