@@ -92,8 +92,8 @@ const AllProducts = ({
               xs={1}
               className={`g-4 row-cols-md-3 row-cols-sm-2 row-cols-1 ${sidebarOpen ? 'row-cols-xxl-5 row-cols-lg-4' : 'row-cols-xxl-4'}`}
             >
-              {data?.data?.length > 0 ? (
-                data.data.map((item) => (
+              {data?.data?.data?.length > 0 ? (
+                data.data.data.map((item) => (
                   <ShowProduct
                     productData={item}
                     key={item.id}
@@ -111,7 +111,7 @@ const AllProducts = ({
         )}
 
         {/* ✅ Pagination (now receives correct props) */}
-        {data?.data?.length > 0 && (
+        {data?.data?.data?.length > 0 && (
           // <Pagination
           //   current_page={data.current_page}
           //   total={data.total}
