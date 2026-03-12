@@ -32,8 +32,6 @@ const CheckoutSidebar = ({ addToCartData, values, setFieldValue, data, loading, 
   // Submitting data on Checkout
   useEffect(() => {
     if (values["billing_address_id"] && (addToCartData?.is_digital_only || values["shipping_address_id"])) {
-      values["variation_id"] = "";
-
       const targetObject = {
         ...values,
         coupon: values["coupon"] || "",
@@ -50,12 +48,11 @@ const CheckoutSidebar = ({ addToCartData, values, setFieldValue, data, loading, 
       };
 
       mutate(targetObject);
-      if (loading) {
-        setStoreCoupon("");
-        setFieldValue("coupon", "");
-      }
     }
   }, [values["billing_address_id"], values["shipping_address_id"], values["payment_method"], values["delivery_description"], values["points_amount"], values["wallet_balance"]]);
+
+  const summaryData = data?.data?.total;
+
   return (
     <Card className="pos-detail-card">
       <div className="pos-loader">
@@ -63,15 +60,15 @@ const CheckoutSidebar = ({ addToCartData, values, setFieldValue, data, loading, 
         <ul className={`summary-total`}>
           <li>
             <h4>{t("subtotal")}</h4>
-            <h4 className="price">{typeof data?.data?.total?.sub_total !== "undefined" ? convertCurrency(data?.data?.total?.sub_total) : addToCartData?.total?.sub_total ? convertCurrency(addToCartData?.total?.sub_total) : t(`not_calculated_yet`)}</h4>
+            <h4 className="price">{summaryData?.sub_total !== undefined ? convertCurrency(summaryData?.sub_total) : addToCartData?.total ? convertCurrency(addToCartData?.total) : t(`not_calculated_yet`)}</h4>
           </li>
           <li>
             <h4>{t("shipping")}</h4>
-            <h4 className="price">{typeof data?.data?.total?.shipping_total !== "undefined" ? convertCurrency(data?.data?.total?.shipping_total) : t(`not_calculated_yet`)}</h4>
+            <h4 className="price">{summaryData?.shipping_total !== undefined ? convertCurrency(summaryData?.shipping_total) : t(`not_calculated_yet`)}</h4>
           </li>
           <li>
             <h4>{t("tax")}</h4>
-            <h4 className="price">{typeof data?.data?.total?.tax_total !== "undefined" ? convertCurrency(data?.data?.total?.tax_total) : t(`not_calculated_yet`)}</h4>
+            <h4 className="price">{summaryData?.tax_total !== undefined ? convertCurrency(summaryData?.tax_total) : t(`not_calculated_yet`)}</h4>
           </li>
 
           <PointWallet values={values} setFieldValue={setFieldValue} data={data} />
@@ -79,7 +76,7 @@ const CheckoutSidebar = ({ addToCartData, values, setFieldValue, data, loading, 
 
           <li className="list-total">
             <h4>{t("total")}</h4>
-            <h4 className="price">{typeof data?.data?.total?.total !== "undefined" ? convertCurrency(data?.data?.total?.total) : addToCartData?.total?.total ? convertCurrency(addToCartData?.total?.total) : t(`not_calculated_yet`)}</h4>
+            <h4 className="price">{summaryData?.total !== undefined ? convertCurrency(summaryData?.total) : addToCartData?.total ? convertCurrency(addToCartData?.total) : t(`not_calculated_yet`)}</h4>
           </li>
         </ul>
       </div>
