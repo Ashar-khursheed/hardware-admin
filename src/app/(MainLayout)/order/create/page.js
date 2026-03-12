@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Form, Formik } from "formik";
 import { Card, Col, Row } from "reactstrap";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AddtoCartAPI, Category } from "@/Utils/AxiosUtils/API";
 import CreateCartContext from "@/Helper/CartContext";
 import TopCategories from "@/Components/Pos/TopCategories";
@@ -19,6 +19,7 @@ const POS = () => {
   const { dispatch, setCartData } = useContext(CreateCartContext);
   const { setSidebarOpen, sidebarOpen } = useContext(SettingContext);
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { data: CategoryData, isLoading } = useQuery([Category], () => request({ url: Category, params: { type: "product", status: 1 } }, router), { refetchOnWindowFocus: false, select: (data) => data.data.data });
 
   const { data: addToCartData, isLoading: addToCartLoader } = useQuery([AddtoCartAPI], () => request({ url: AddtoCartAPI }), { refetchOnWindowFocus: false, select: (res) => res?.data });
@@ -55,7 +56,7 @@ const POS = () => {
   if (isLoading || addToCartLoader) return <Loader />;
   return (
     <>
-      <Formik initialValues={initValues}>
+      <Formik enableReinitialize initialValues={initValues}>
         {({ values, setFieldValue }) => (
           <Form>
             <Row>

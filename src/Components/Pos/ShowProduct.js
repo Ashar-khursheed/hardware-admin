@@ -10,15 +10,18 @@ import SettingContext from "../../Helper/SettingContext";
 import { AddtoCartAPI } from "../../Utils/AxiosUtils/API";
 import useCreate from "../../Utils/Hooks/useCreate";
 import ProductVariationModal from "./ProductVariationModal";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { useTranslation } from "react-i18next";
 
 const ShowProduct = ({ productData, setFieldValue, values }) => {
   const { t } = useTranslation("common");
   const [modal, setModal] = useState();
+  const queryClient = useQueryClient();
   const { convertCurrency, settingObj } = useContext(SettingContext);
   const { data, mutate, isLoading } = useCreate(AddtoCartAPI, false, false, true, (resDta) => {
     setModal(false);
+    queryClient.invalidateQueries([AddtoCartAPI]);
   });
   useEffect(() => {
     // Taking data from API response
