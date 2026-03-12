@@ -13,24 +13,24 @@ import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
 
 const DeliveryAddress = ({ values, updateId, type, title }) => {
-  const router = useRouter() 
-  const { t } = useTranslation( 'common');
+  const router = useRouter()
+  const { t } = useTranslation('common');
   const [modal, setModal] = useState(false);
   const [address, setAddress] = useState([])
   // Getting user by its id
-  const { data, isLoading: load, refetch } = useQuery([user, updateId], () => request({ url: `/${user}/${updateId}` },router), { enabled: false, refetchOnWindowFocus: false, select: (data) => (data.data) });
+  const { data, isLoading: load, refetch } = useQuery([user, updateId], () => request({ url: `/${user}/${updateId}` }, router), { enabled: false, refetchOnWindowFocus: false, select: (data) => (data.data) });
   // Creating Address
-  const {mutate: addressMutate, isLoading } = useCreate(AddressAPI, false, false, "Address Added successfully", () => {
+  const { mutate: addressMutate, isLoading } = useCreate(AddressAPI, false, false, "Address Added successfully", () => {
     refetch(); setModal(false)
   });
   useEffect(() => {
     setAddress(data)
-  }, [data ])
+  }, [data])
   useEffect(() => {
-    if(updateId){
-      load &&  refetch()
+    if (updateId) {
+      load && refetch()
     }
-  }, [load ,updateId]);
+  }, [load, updateId]);
   return (
     <>
       <CheckoutCard icon={<RiMapPinLine />}>
@@ -43,7 +43,7 @@ const DeliveryAddress = ({ values, updateId, type, title }) => {
             {values['consumer_id'] && data?.address?.length > 0 ?
               <Row className="g-4">
                 {address?.address?.map((item, i) => (
-                  <ShowAddress item={item} data={data} key={i} type={type} index={i} />
+                  <ShowAddress item={item} data={data} key={i} type={type} index={i} setFieldValue={setFieldValue} />
                 ))}
               </Row>
               : <div className="empty-box">

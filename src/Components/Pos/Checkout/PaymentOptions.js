@@ -14,7 +14,7 @@ function PaymentOptions({ values, setFieldValue }) {
             <div className="checkout-detail">
                 <div className="accordion accordion-flush custom-accordion" id="accordionFlushExample">
                     {values['consumer_id'] ?
-                        <div className="accordion-item">
+                        <div className="accordion-item d-flex gap-4">
                             <div className="accordion-header" id="flush-headingOne">
                                 <div className="accordion-button">
                                     <div className="custom-form-check form-check mb-0">
@@ -22,6 +22,17 @@ function PaymentOptions({ values, setFieldValue }) {
                                             <Input className="form-check-input mt-0" type="radio" name="flexRadioDefault" id="credit" onClick={() => {
                                                 setFieldValue('payment_method', "cod")
                                             }} />{t("cash_on_delivery")}
+                                        </Label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="accordion-header" id="flush-headingTwo">
+                                <div className="accordion-button">
+                                    <div className="custom-form-check form-check mb-0">
+                                        <Label className="form-check-label" htmlFor="stripe">
+                                            <Input className="form-check-input mt-0" type="radio" name="flexRadioDefault" id="stripe" onClick={() => {
+                                                setFieldValue('payment_method', "stripe")
+                                            }} />{t("stripe")}
                                         </Label>
                                     </div>
                                 </div>

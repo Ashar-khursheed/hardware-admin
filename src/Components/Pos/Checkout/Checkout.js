@@ -20,7 +20,7 @@ const Checkout = ({ loading, mutate, data, errorCoupon, setAppliedCoupon, applie
   const [tc, setTc] = useState(null);
   // Initial Value for checkout
   const [initValues, setInitValues] = useState(
-    { products: [], consumer_id: "", billing_address_id: "", shipping_address_id: "", shipping_total: 0, total: 0, coupon: "", wallet_balance: false, points_amount: false, delivery_description: "", delivery_interval: "", isTimeSlot: false, payment_method: "", isPoint: "", isWallet: "" });
+    { products: [], consumer_id: "", billing_address_id: "", shipping_address_id: "", billing_address: {}, shipping_address: {}, shipping_total: 0, total: 0, coupon: "", wallet_balance: false, points_amount: false, delivery_description: "", delivery_interval: "", isTimeSlot: false, payment_method: "", isPoint: "", isWallet: "" });
   // Calling Add to Cart API
   const { data: addToCartData, isLoading: addToCartLoader, refetch } = useQuery([AddtoCartAPI], () => request({ url: AddtoCartAPI }, router), { refetchOnWindowFocus: false, cacheTime: 0, select: (res) => res?.data });
   // Getting Users data

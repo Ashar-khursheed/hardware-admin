@@ -33,14 +33,40 @@ const CheckoutSidebar = ({ addToCartData, values, setFieldValue, data, loading, 
   useEffect(() => {
     if (values["billing_address_id"] && values["shipping_address_id"] && values["delivery_description"] && values["payment_method"]) {
       values["variation_id"] = "";
-      mutate(values);
+
+      const targetObject = {
+        ...values,
+        coupon: values["coupon"] || "",
+        billing_address_id: values["billing_address_id"],
+        shipping_address_id: values["shipping_address_id"],
+        billing_address: values["billing_address"] || {},
+        shipping_address: values["shipping_address"] || {},
+        delivery_description: values["delivery_description"] || "standard",
+        delivery_interval: values["delivery_interval"] || "",
+        points_amount: values["points_amount"] || 0,
+        payment_method: values["payment_method"] || "cod",
+        products: values["products"],
+        wallet_balance: values["wallet_balance"] || 0,
+      };
+
+      mutate(targetObject);
       if (loading) {
         setStoreCoupon("");
         setFieldValue("coupon", "");
       }
     }
     if (addToCartData?.is_digital_only && values["billing_address_id"] && values["payment_method"]) {
-      mutate(values);
+      const targetObject = {
+        ...values,
+        coupon: values["coupon"] || "",
+        billing_address_id: values["billing_address_id"],
+        billing_address: values["billing_address"] || {},
+        points_amount: values["points_amount"] || 0,
+        payment_method: values["payment_method"] || "cod",
+        products: values["products"],
+        wallet_balance: values["wallet_balance"] || 0,
+      };
+      mutate(targetObject);
     }
   }, [values["billing_address_id"], values["shipping_address_id"], values["payment_method"], values["delivery_description"], values["points_amount"], values["wallet_balance"]]);
   return (

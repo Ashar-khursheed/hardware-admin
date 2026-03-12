@@ -3,16 +3,19 @@ import { Col, Label } from 'reactstrap';
 import { ReactstrapRadio } from '../../ReactstrapFormik';
 import { useTranslation } from "react-i18next";
 
-const ShowAddress = ({ item, data, type, index }) => {
-    
-    const { t } = useTranslation( 'common');
+const ShowAddress = ({ item, data, type, index, setFieldValue }) => {
+
+    const { t } = useTranslation('common');
     return (
         <Col xxl={6} md={6}>
             <Label htmlFor={`address-${type}-${index}`}>
                 <div className="delivery-address-box">
                     <div>
                         <div className="form-check">
-                            <Field component={ReactstrapRadio} id={`address-${type}-${index}`} className="form-check-input" type="radio" name={`${type}_address_id`} value={item.id} />
+                            <Field component={ReactstrapRadio} id={`address-${type}-${index}`} className="form-check-input" type="radio" name={`${type}_address_id`} value={item.id} onChange={() => {
+                                setFieldValue(`${type}_address_id`, item.id);
+                                setFieldValue(`${type}_address`, item);
+                            }} />
                         </div>
                         <ul className="delivery-address-detail">
                             <li>
