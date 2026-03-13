@@ -22,12 +22,14 @@ const AllTabsElectronicsThree = forwardRef(({ activeTab, values, setFieldValue, 
   const [customSearch, setCustomSearch] = useState("");
   const [tc, setTc] = useState(null);
 
+  const productIds = Array.from(new Set(concatDynamicProductKeys(values))).join();
+
   const {
     data: productData,
     isLoading: productLoader,
     refetch,
   } = useQuery(
-    [product, values],
+    [product, customSearch, productIds],
     () =>
       request({
         url: product,
@@ -64,7 +66,7 @@ const AllTabsElectronicsThree = forwardRef(({ activeTab, values, setFieldValue, 
     refetch();
   }, [customSearch]);
 
-  if (productLoader || categoryLoader) return <Loader />;
+  // if (productLoader || categoryLoader) return <Loader />;
 
   return (
     <Col xl="7" lg="8">

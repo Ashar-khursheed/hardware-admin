@@ -15,10 +15,12 @@ import AllTabElectronicsThree from "./AllTabElectronicsThree";
 import ElectronicsThreeInitialValue from "./ElectronicsThreeFormValues/ElectronicsThreeInitialValue";
 import LanguageRedirection from "@/Components/CommonComponent/LanguageRedirection";
 import ElectronicsThreeSubmit from "./ElectronicsThreeFormValues/ElectronicsThreeSubmit";
+import LanguageContext from "@/Helper/LanguageContext";
 
 const ElectronicsThreeForm = ({ title, apiData }) => {
 
   const { t } = useTranslation("common");
+  const { formLanguage } = useContext(LanguageContext);
   const [activeTab, setActiveTab] = useState("1");
   const refRefetch = useRef();
   const { data, isLoading } = useQuery([HomePageAPI], () => request({ url: HomePageAPI, params: { slug: "electronics_three" } }), {
@@ -52,10 +54,10 @@ const ElectronicsThreeForm = ({ title, apiData }) => {
   return (
     <Formik
       enableReinitialize
-      initialValues={{ ...ElectronicsThreeInitialValue(NewSettingsData) }}
+      initialValues={{ ...ElectronicsThreeInitialValue(NewSettingsData, formLanguage) }}
       onSubmit={(values) => {
         values["_method"] = "put";
-        ElectronicsThreeSubmit(values, mutate);
+        ElectronicsThreeSubmit(values, mutate, formLanguage);
       }}
     >
       {({ values, errors, touched, setFieldValue }) => (
