@@ -15,17 +15,22 @@ export const sanitizeUrl = (data, type = 'other') => {
     // Already an S3 URL — pass through untouched
     if (url.includes(S3_HOSTNAME)) return url;
 
-    // Rewrite local/production /storage/{id}/{filename} → S3
-    const match = url.match(STORAGE_PATTERN);
+    // Rewrite /storage/{id}/{filename} or absolute storage URLs to S3
+    const match = url.match(STORAGE_PATTERN) || url.match(/\/storage\/(\d+)\/([^?#]+)/);
     if (match) {
-        const id = match[1];
-        const filename = match[2];
+        const id = match[match.length - 2];
+        const filename = match[match.length - 1];
         if (type === 'product') {
-            // Product images go into /products/ prefix
             return `${S3_BASE}/products/${filename}`;
         }
-        // Other assets (logos, favicons, etc.) keep the /{id}/ structure
         return `${S3_BASE}/${id}/${filename}`;
+    }
+
+    // Fallback for relative paths starting with /
+    if (url.startsWith('/storage/')) {
+        const parts = url.split('/');
+        const filename = parts[parts.length - 1];
+        if (type === 'product') return `${S3_BASE}/products/${filename}`;
     }
 
     // Replace double slashes except after colon (http://)

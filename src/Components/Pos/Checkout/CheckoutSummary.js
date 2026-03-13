@@ -31,7 +31,7 @@ const CheckoutSidebar = ({ addToCartData, values, setFieldValue, data, loading, 
 
   // Submitting data on Checkout
   useEffect(() => {
-    if (values["billing_address_id"] && (addToCartData?.is_digital_only || values["shipping_address_id"])) {
+    if (values["billing_address_id"]) {
       const targetObject = {
         ...values,
         coupon: values["coupon"] || "",

@@ -24,17 +24,19 @@ const POS = () => {
 
   const { data: addToCartData, isLoading: addToCartLoader } = useQuery([AddtoCartAPI], () => request({ url: AddtoCartAPI }), { refetchOnWindowFocus: false, select: (res) => res?.data });
   const [initValues, setInitValues] = useState({ products: [], consumer_id: "", billing_address_id: "", shipping_address_id: "", shipping_total: 0, tax_total: 0, total: 0, variation_id: "" });
+
   useEffect(() => {
-    if (addToCartData?.items.length > 0) {
+    if (addToCartData) {
       setInitValues((prev) => {
         return {
           ...prev,
-          products: addToCartData?.items,
-          total: addToCartData?.total,
+          products: addToCartData?.items || [],
+          total: addToCartData?.total || 0,
         };
       });
     }
-  }, [addToCartLoader]);
+  }, [addToCartData]);
+
   const compactSidebar = () => {
     if (!sidebarOpen) {
       if (window.innerWidth <= 991) {
@@ -53,7 +55,9 @@ const POS = () => {
     setSidebarOpen(true);
     return () => setSidebarOpen(false);
   }, []);
+
   if (isLoading || addToCartLoader) return <Loader />;
+
   return (
     <>
       <Formik enableReinitialize initialValues={initValues}>

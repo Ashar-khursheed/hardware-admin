@@ -58,7 +58,7 @@ const ShowProduct = ({ productData, setFieldValue, values }) => {
     <Col>
       <div className="product-box">
         <div className="product-image">
-          <Image src={sanitizeUrl(productData?.product_thumbnail || productData?.product_galleries?.[0]) || placeHolderImage} alt="product Images" className="img-fluid" width={100} height={100} />
+          <Image src={sanitizeUrl(productData?.product_thumbnail || productData?.thumbnail || productData?.product_galleries?.[0], 'product') || placeHolderImage} alt="product Images" className="img-fluid" width={100} height={100} />
         </div >
         <div className="product-detail">
           <h6 className="name name-2 h-100" onClick={() => window.open(`${settingObj?.general?.site_url}/product/${productData.slug}`)}>

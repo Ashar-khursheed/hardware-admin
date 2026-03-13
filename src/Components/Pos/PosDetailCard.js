@@ -45,7 +45,7 @@ const PosDetailCard = ({ values, setFieldValue, initValues }) => {
               {values["products"]?.map((item, i) => (
                 <li key={i}>
                   <div className="cart-listing-box">
-                    <Image src={sanitizeUrl(item?.variation?.variation_image || item?.product?.product_thumbnail || item?.product?.product_galleries?.[0] || item?.product?.thumbnail || item?.variation?.variation_image?.original_url) || placeHolderImage} className="img-fluid" alt={item?.product?.name || ""} width={70} height={70} />
+                    <Image src={sanitizeUrl(item?.variation?.variation_image || item?.product?.product_thumbnail || item?.product?.product_galleries?.[0] || item?.product?.thumbnail || item?.variation?.variation_image?.original_url, 'product') || placeHolderImage} className="img-fluid" alt={item?.product?.name || ""} width={70} height={70} />
                     <div className="cart-content">
                       <h4>{item?.variation ? item?.variation?.name : item?.product?.name}</h4>
                       <div>
