@@ -10,7 +10,7 @@ import useDelete from '@/Utils/Hooks/useDelete';
 import useCreate from '@/Utils/Hooks/useCreate';
 import { AddtoCartAPI } from '@/Utils/AxiosUtils/API';
 
-const SidebarCheckoutCard = ({ values }) => {
+const SidebarCheckoutCard = ({ values, setFieldValue }) => {
 
     const { t } = useTranslation('common');
     const { convertCurrency } = useContext(SettingContext)
