@@ -52,7 +52,13 @@ const CheckoutSummary = ({ addToCartData, values, setFieldValue, data, loading, 
   }, [values["billing_address_id"], values["shipping_address_id"], values["payment_method"], values["delivery_description"], values["points_amount"], values["wallet_balance"]]);
 
   const summaryData = data?.data?.total;
-  const taxRate = statsData?.tax_rate || 0;
+
+  // Find selected address to get state-specific tax rate
+  const selectedConsumer = userData?.find(user => user.id == values["consumer_id"]);
+  const selectedAddress = selectedConsumer?.address?.find(addr => addr.id == values["shipping_address_id"]);
+  const addressTaxRate = selectedAddress?.state?.tax_rate;
+
+  const taxRate = addressTaxRate !== undefined ? Number(addressTaxRate) : (statsData?.tax_rate || 0);
   const subTotal = summaryData?.sub_total !== undefined ? summaryData?.sub_total : addToCartData?.total || 0;
   const calculatedTax = (summaryData?.tax_total !== undefined && summaryData?.tax_total !== 0) ? summaryData?.tax_total : (subTotal * taxRate) / 100;
   const totalAmount = summaryData?.total !== undefined ? (summaryData.total + (summaryData.tax_total === undefined || summaryData.tax_total === 0 ? calculatedTax : 0)) : (subTotal + calculatedTax + (summaryData?.shipping_total || 0) - (summaryData?.coupon_total_discount || 0) - (summaryData?.points_amount || 0) - (summaryData?.wallet_balance || 0));

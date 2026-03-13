@@ -23,21 +23,23 @@ const SidebarCheckoutCard = ({ values, setFieldValue }) => {
             </div>
             <div className="product-details">
                 <>
-                    <ul className="cart-listing">
+                    <ul className="cart-listing summary-cart-listing">
                         {values['products']?.map((item, i) => (
                             <li key={i}>
                                 <div className='checkout-product-list-box'>
-                                    <Image src={item?.variation && item?.variation?.variation_image ? (sanitizeUrl(item?.variation?.variation_image, 'product') || placeHolderImage)
-                                        : item?.product?.product_thumbnail ? (sanitizeUrl(item?.product?.product_thumbnail, 'product') || placeHolderImage)
-                                            : (sanitizeUrl(item?.product?.thumbnail, 'product') || placeHolderImage)} className="img-fluid" alt={item?.product?.name || ''} width={70} height={70} />
-                                    <div className="cart-content">
-                                        <h4>{item?.variation ? item?.variation?.name : item?.product?.name}</h4>
-                                        <h5 className='text-theme'>
-                                            {item?.variation ? convertCurrency(item?.variation.sale_price) : item?.product && item?.wholesale_price ? convertCurrency(item?.wholesale_price) : convertCurrency(item?.product?.sale_price)}
-                                        </h5>
-                                        <div className="d-flex justify-content-between align-items-center">
-                                            <h5 className='price'>{convertCurrency((item?.variation ? item?.variation.sale_price : item?.product?.sale_price) * (item.quantity))}</h5>
-                                            <IncDec item={item} values={values} setFieldValue={setFieldValue} deleteMutate={deleteMutate} addToCart={addToCart} />
+                                    <Image src={sanitizeUrl(item?.variation?.variation_image || item?.product?.product_thumbnail || item?.product?.product_galleries?.[0] || item?.product?.thumbnail || item?.product?.thumbnail?.original_url, 'product') || placeHolderImage} className="img-fluid" alt={item?.product?.name || ''} width={70} height={70} />
+                                    <div className="cart-content w-100">
+                                        <div className="d-flex justify-content-between align-items-start gap-2">
+                                            <h4 className="flex-grow-1 text-truncate" style={{ maxWidth: '140px' }}>{item?.variation ? item?.variation?.name : item?.product?.name}</h4>
+                                            <h5 className='text-theme text-nowrap'>
+                                                {item?.variation ? convertCurrency(item?.variation.sale_price) : item?.product && item?.wholesale_price ? convertCurrency(item?.wholesale_price) : convertCurrency(item?.product?.sale_price)}
+                                            </h5>
+                                        </div>
+                                        <div className="d-flex justify-content-between align-items-end mt-2">
+                                            <h5 className='price mb-0'>{convertCurrency((item?.variation ? item?.variation.sale_price : item?.product?.sale_price) * (item.quantity))}</h5>
+                                            <div className="checkout-qty-control">
+                                                <IncDec item={item} values={values} setFieldValue={setFieldValue} deleteMutate={deleteMutate} addToCart={addToCart} />
+                                            </div>
                                         </div>
                                     </div>
                                 </div >
