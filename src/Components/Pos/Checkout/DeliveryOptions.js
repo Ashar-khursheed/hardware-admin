@@ -7,8 +7,8 @@ import SettingContext from "@/Helper/SettingContext";
 import { useTranslation } from "react-i18next";
 
 const DeliveryOptions = ({ values, setFieldValue }) => {
-  
-  const { t } = useTranslation( 'common');
+
+  const { t } = useTranslation('common');
   const { state } = useContext(SettingContext)
   return (
     <CheckoutCard icon={<RiTruckLine />}>
@@ -23,19 +23,19 @@ const DeliveryOptions = ({ values, setFieldValue }) => {
                 <div className="shipment-detail w-100">
                   <div className="form-check custom-form-check hide-check-box">
                     <Input className="form-check-input" type="radio" name="standard" id="standard1" onChange={() => {
-                      setFieldValue("delivery_description", `${state?.setDelivery?.default?.title} | ${state?.setDelivery?.default?.description}`);
+                      setFieldValue("delivery_description", `${state?.setDelivery?.default?.title || 'Standard'} | ${state?.setDelivery?.default?.description || 'Standard Delivery'}`);
                       setFieldValue('isTimeSlot', false)
                       setFieldValue("delivery_interval", null);
                     }} />
                     <Label className="form-check-label" htmlFor="standard1">
-                      {state?.setDelivery?.default?.title} | {state?.setDelivery?.default?.description}
+                      {state?.setDelivery?.default?.title || t('standard')} | {state?.setDelivery?.default?.description || t('standard_delivery')}
                     </Label>
                   </div>
                 </div>
               </div>
             </div>
           </Col>
-          {state?.setDelivery?.same_day_delivery &&
+          {(state?.setDelivery?.same_day_delivery || !state?.setDelivery?.default) &&
             <>
               <Col xxl={6}>
                 <div className="delivery-option">
@@ -43,12 +43,12 @@ const DeliveryOptions = ({ values, setFieldValue }) => {
                     <div className="shipment-detail w-100">
                       <div className="form-check custom-form-check hide-check-box">
                         <Input className="form-check-input" type="radio" name="standard" id="standard2" onChange={() => {
-                          setFieldValue("delivery_description", `${state?.setDelivery?.same_day?.title} | ${state?.setDelivery?.same_day?.description}`);
+                          setFieldValue("delivery_description", `${state?.setDelivery?.same_day?.title || 'Same Day'} | ${state?.setDelivery?.same_day?.description || 'Same Day Delivery'}`);
                           setFieldValue('isTimeSlot', true)
                           setFieldValue("delivery_interval", null);
                         }} />
                         <Label className="form-check-label" htmlFor="standard2">
-                          {state?.setDelivery?.same_day?.title} | {state?.setDelivery?.same_day?.description}
+                          {state?.setDelivery?.same_day?.title || t('same_day')} | {state?.setDelivery?.same_day?.description || t('same_day_delivery')}
                         </Label>
                       </div>
                     </div>

@@ -5,11 +5,17 @@ import { useContext } from 'react';
 import { CardBody } from 'reactstrap';
 import placeHolderImage from "../../../../public/assets/images/placeholder.png";
 import { useTranslation } from "react-i18next";
+import IncDec from '../IncDec';
+import useDelete from '@/Utils/Hooks/useDelete';
+import useCreate from '@/Utils/Hooks/useCreate';
+import { AddtoCartAPI } from '@/Utils/AxiosUtils/API';
 
 const SidebarCheckoutCard = ({ values }) => {
 
     const { t } = useTranslation('common');
     const { convertCurrency } = useContext(SettingContext)
+    const { mutate: deleteMutate } = useDelete(AddtoCartAPI);
+    const { mutate: addToCart } = useCreate(AddtoCartAPI, false, false, "No");
     return (
         <CardBody>
             <div className="title-header">
@@ -29,7 +35,10 @@ const SidebarCheckoutCard = ({ values }) => {
                                         <h5 className='text-theme'>
                                             {item?.variation ? convertCurrency(item?.variation.sale_price) : item?.product && item?.wholesale_price ? convertCurrency(item?.wholesale_price) : convertCurrency(item?.product?.sale_price)}
                                         </h5>
-                                        <h5 className='price'>{convertCurrency((item?.variation ? item?.variation.sale_price : item?.product?.sale_price) * (item.quantity))}</h5>
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <h5 className='price'>{convertCurrency((item?.variation ? item?.variation.sale_price : item?.product?.sale_price) * (item.quantity))}</h5>
+                                            <IncDec item={item} values={values} setFieldValue={setFieldValue} deleteMutate={deleteMutate} addToCart={addToCart} />
+                                        </div>
                                     </div>
                                 </div >
                             </li >

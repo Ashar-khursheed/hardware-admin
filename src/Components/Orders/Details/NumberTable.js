@@ -7,8 +7,8 @@ import SettingContext from '@/Helper/SettingContext';
 import { useTranslation } from "react-i18next";
 
 const NumberTable = ({ data }) => {
-    
-    const { t } = useTranslation( 'common');
+
+    const { t } = useTranslation('common');
     const { convertCurrency } = useContext(SettingContext)
     return (
         <div className="tracking-wrapper table-responsive">
@@ -26,7 +26,7 @@ const NumberTable = ({ data }) => {
                     {data?.products?.map((elem, index) => (
                         <tr key={index}>
                             <td className="product-image">
-                                <Avatar customeClass={'img-fluid'} data={elem?.product_thumbnail} placeHolder={placeHolderImage} name={elem?.name} />
+                                <Avatar customeClass={'img-fluid'} data={elem?.pivot?.variation?.variation_image || elem?.product_thumbnail || elem?.product_galleries?.[0] || elem?.thumbnail} placeHolder={placeHolderImage} name={elem?.name} />
                             </td>
                             <td>
                                 <h6>{elem?.pivot?.variation ? elem?.pivot?.variation?.name : elem?.name}</h6>

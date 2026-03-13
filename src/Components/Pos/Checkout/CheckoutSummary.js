@@ -7,8 +7,8 @@ import PointWallet from "../PointWallet";
 import Loader from "@/Components/CommonComponent/Loader";
 import { useTranslation } from "react-i18next";
 
-const CheckoutSidebar = ({ addToCartData, values, setFieldValue, data, loading, mutate, userData, errorCoupon, appliedCoupon, setAppliedCoupon, storeCoupon, setStoreCoupon }) => {
-  const { convertCurrency } = useContext(SettingContext);
+const CheckoutSummary = ({ addToCartData, values, setFieldValue, data, loading, mutate, userData, errorCoupon, appliedCoupon, setAppliedCoupon, storeCoupon, setStoreCoupon }) => {
+  const { convertCurrency, statsData } = useContext(SettingContext);
   const { t } = useTranslation("common");
 
   // Checking point and wallet for particular user
@@ -52,6 +52,10 @@ const CheckoutSidebar = ({ addToCartData, values, setFieldValue, data, loading, 
   }, [values["billing_address_id"], values["shipping_address_id"], values["payment_method"], values["delivery_description"], values["points_amount"], values["wallet_balance"]]);
 
   const summaryData = data?.data?.total;
+  const taxRate = statsData?.tax_rate || 0;
+  const subTotal = summaryData?.sub_total !== undefined ? summaryData?.sub_total : addToCartData?.total || 0;
+  const calculatedTax = (summaryData?.tax_total !== undefined && summaryData?.tax_total !== 0) ? summaryData?.tax_total : (subTotal * taxRate) / 100;
+  const totalAmount = summaryData?.total !== undefined ? (summaryData.total + (summaryData.tax_total === undefined || summaryData.tax_total === 0 ? calculatedTax : 0)) : (subTotal + calculatedTax + (summaryData?.shipping_total || 0) - (summaryData?.coupon_total_discount || 0) - (summaryData?.points_amount || 0) - (summaryData?.wallet_balance || 0));
 
   return (
     <Card className="pos-detail-card">
@@ -60,7 +64,7 @@ const CheckoutSidebar = ({ addToCartData, values, setFieldValue, data, loading, 
         <ul className={`summary-total`}>
           <li>
             <h4>{t("subtotal")}</h4>
-            <h4 className="price">{summaryData?.sub_total !== undefined ? convertCurrency(summaryData?.sub_total) : addToCartData?.total ? convertCurrency(addToCartData?.total) : t(`not_calculated_yet`)}</h4>
+            <h4 className="price">{convertCurrency(subTotal)}</h4>
           </li>
           <li>
             <h4>{t("shipping")}</h4>
@@ -68,7 +72,7 @@ const CheckoutSidebar = ({ addToCartData, values, setFieldValue, data, loading, 
           </li>
           <li>
             <h4>{t("tax")}</h4>
-            <h4 className="price">{summaryData?.tax_total !== undefined ? convertCurrency(summaryData?.tax_total) : t(`not_calculated_yet`)}</h4>
+            <h4 className="price">{convertCurrency(calculatedTax)}</h4>
           </li>
 
           <PointWallet values={values} setFieldValue={setFieldValue} data={data} />
@@ -76,7 +80,7 @@ const CheckoutSidebar = ({ addToCartData, values, setFieldValue, data, loading, 
 
           <li className="list-total">
             <h4>{t("total")}</h4>
-            <h4 className="price">{summaryData?.total !== undefined ? convertCurrency(summaryData?.total) : addToCartData?.total ? convertCurrency(addToCartData?.total) : t(`not_calculated_yet`)}</h4>
+            <h4 className="price">{convertCurrency(totalAmount)}</h4>
           </li>
         </ul>
       </div>
@@ -85,4 +89,4 @@ const CheckoutSidebar = ({ addToCartData, values, setFieldValue, data, loading, 
   );
 };
 
-export default CheckoutSidebar;
+export default CheckoutSummary;

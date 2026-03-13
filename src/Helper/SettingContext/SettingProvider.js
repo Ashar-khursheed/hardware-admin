@@ -13,8 +13,11 @@ const SettingProvider = (props) => {
     const router = useRouter();
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [state, dispatch] = useReducer(settingReducer, { setFavicon: "", setLogo: "", setResponsiveImage: "", setTitle: "", setTagline: "", isMultiVendor: false, zone_enable: true, setDelivery: {}, setCopyRight: "", setDarkLight: "", setDarkLogo: "", setLightLogo: "", setTinyLogo: "" })
-    const { data, isLoading, refetch } = useQuery([updateSetting], () => request({ url: updateSetting },router), {
+    const { data, isLoading, refetch } = useQuery([updateSetting], () => request({ url: updateSetting }, router), {
         enabled: false, refetchOnWindowFocus: false, select: (res) => res?.data
+    });
+    const { data: statsData } = useQuery(["/statistics/count"], () => request({ url: "/statistics/count" }, router), {
+        refetchOnWindowFocus: false, select: (res) => res?.data
     });
     useEffect(() => {
         refetch()
@@ -30,21 +33,21 @@ const SettingProvider = (props) => {
         let symbol = settingObj?.general?.default_currency?.symbol || '$';
         let amount = Number(value);
         amount = amount * settingObj?.general?.default_currency?.exchange_rate;
-    
+
         // Apply thousand separators if the format parameter is passed and is true
         if (format) {
             amount = amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         } else {
             amount = amount.toFixed(2);
         }
-    
+
         if (position === 'before_price') {
             return `${symbol}${amount}`;
         } else {
             return `${amount}${symbol}`;
         }
     }, [settingObj]);
-    
+
 
     useEffect(() => {
         if (!isLoading) {
@@ -69,7 +72,7 @@ const SettingProvider = (props) => {
         }
     }, [isLoading])
     return (
-        <SettingContext.Provider value={{ ...props, sidebarOpen, setSidebarOpen, currencySymbol, setCurrencySymbol, state, dispatch, searchSidebarMenu, setSearchSidebarMenu, convertCurrency, settingObj, setSettingObj }}>
+        <SettingContext.Provider value={{ ...props, sidebarOpen, setSidebarOpen, currencySymbol, setCurrencySymbol, state, dispatch, searchSidebarMenu, setSearchSidebarMenu, convertCurrency, settingObj, setSettingObj, statsData }}>
             {props.children}
         </SettingContext.Provider>
     )
