@@ -27,7 +27,7 @@ const SidebarCheckoutCard = ({ values, setFieldValue }) => {
                         {values['products']?.map((item, i) => (
                             <li key={i}>
                                 <div className='checkout-product-list-box'>
-                                    <Image src={sanitizeUrl(item?.variation?.variation_image || item?.product?.product_thumbnail || item?.product?.product_galleries?.[0] || item?.product?.thumbnail || item?.product?.thumbnail?.original_url, 'product') || placeHolderImage} className="img-fluid" alt={item?.product?.name || ''} width={70} height={70} />
+                                    <Image src={sanitizeUrl(item?.variation?.variation_image || item?.product?.product_thumbnail || item?.product?.product_galleries?.[0] || item?.product?.thumbnail || item?.variation?.variation_image?.original_url || item?.product?.thumbnail?.original_url || item?.product_thumbnail, 'product') || placeHolderImage} className="img-fluid" alt={item?.product?.name || ''} width={70} height={70} />
                                     <div className="cart-content w-100">
                                         <div className="d-flex justify-content-between align-items-start gap-2">
                                             <h4 className="flex-grow-1 text-truncate" style={{ maxWidth: '140px' }}>{item?.variation ? item?.variation?.name : item?.product?.name}</h4>
