@@ -8,12 +8,13 @@ import useHandleLogin from "@/Utils/Hooks/Auth/useLogin";
 import { YupObject, emailSchema, nameSchema, recaptchaSchema } from "@/Utils/Validation/ValidationSchemas";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import Link from "next/link";
-import { useContext, useRef, useState } from "react";
+import { useContext, useMemo, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import LogoImg from "../../../../../public/assets/images/logo.png";
 import { useTranslation } from "react-i18next";
 import { Col } from "reactstrap";
 import Image from "next/image";
+import * as Yup from 'yup'; // Assuming Yup is used for validation schemas
 
 const Login = () => {
   const [showBoxMessage, setShowBoxMessage] = useState();
@@ -21,6 +22,14 @@ const Login = () => {
   const { t } = useTranslation('common');
   const { mutate, isLoading } = useHandleLogin(setShowBoxMessage);
   const reCaptchaRef = useRef();
+
+  const loginValidationSchema = useMemo(() => {
+    return YupObject({
+      email: emailSchema,
+      password: nameSchema,
+      recaptcha: settingObj?.google_reCaptcha?.status ? recaptchaSchema : Yup.string().notRequired(),
+    });
+  }, [settingObj]);
 
   return (
     <div className="box-wrapper w-100">
@@ -35,15 +44,13 @@ const Login = () => {
         <div className="input-box">
 
           <Formik
+            enableReinitialize
             initialValues={{
               email: "",
               password: "",
+              recaptcha: ""
             }}
-            validationSchema={YupObject({
-              email: emailSchema,
-              password: nameSchema,
-              recaptcha: settingObj?.google_reCaptcha?.status ? recaptchaSchema : "",
-            })}
+            validationSchema={loginValidationSchema}
             onSubmit={(values, actions) => {
               mutate(values, {
                 onSuccess: () => {
@@ -64,7 +71,6 @@ const Login = () => {
                 <Col sm="12">
                   <Field
                     inputprops={{ noExtraSpace: true }}
-                    autoComplete="email"
                     name="email"
                     type="email"
                     component={ReactstrapInput}

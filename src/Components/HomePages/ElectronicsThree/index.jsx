@@ -1,7 +1,7 @@
 import TabTitle from "@/Components/Widgets/TabTitle";
 
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Form, Formik } from "formik";
 import { useContext, useRef, useState } from "react";
 import { Card, Col, Row } from "reactstrap";
@@ -16,9 +16,9 @@ import ElectronicsThreeInitialValue from "./ElectronicsThreeFormValues/Electroni
 import LanguageRedirection from "@/Components/CommonComponent/LanguageRedirection";
 import ElectronicsThreeSubmit from "./ElectronicsThreeFormValues/ElectronicsThreeSubmit";
 
-const ElectronicsThreeForm = ({ title,apiData }) => {
-  
-  const { t } = useTranslation( "common");
+const ElectronicsThreeForm = ({ title, apiData }) => {
+
+  const { t } = useTranslation("common");
   const [activeTab, setActiveTab] = useState("1");
   const refRefetch = useRef();
   const { data, isLoading } = useQuery([HomePageAPI], () => request({ url: HomePageAPI, params: { slug: "electronics_three" } }), {
@@ -26,12 +26,14 @@ const ElectronicsThreeForm = ({ title,apiData }) => {
     select: (res) => res.data,
   });
 
+  const queryClient = useQueryClient();
   const { mutate, isLoading: createLoader } = useCreate(`${HomePageAPI}/${data?.id}`, false, false, false, (resDta) => {
+    queryClient.invalidateQueries([HomePageAPI]);
     refRefetch?.current?.call();
   });
 
   let IncludeList = ["status"];
-  let NewSettingsData = data || {};
+  let NewSettingsData = data ? JSON.parse(JSON.stringify(data)) : {};
   const RecursiveSet = ({ data }) => {
     if (data && typeof data == "object") {
       Object.keys(data).forEach((key) => {
@@ -73,7 +75,7 @@ const ElectronicsThreeForm = ({ title,apiData }) => {
               </Row>
             </Form>
           </Card>
-        </Col>  
+        </Col>
       )}
     </Formik>
   );
