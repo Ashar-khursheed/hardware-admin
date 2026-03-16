@@ -7,7 +7,8 @@ import placeholderImg from "../../../public/assets/images/placeholder.png";
 const Avatar = ({ data, placeHolder, name, customeClass, height, width, noPrevClass, NameWithRound, imageClass }) => {
     const [imgError, setImgError] = useState(false);
     const fallback = placeHolder || placeholderImg;
-    const src = !imgError && (data || placeHolder) ? sanitizeUrl(data || placeHolder, 'product') : fallback;
+    const sanitizedSrc = (data || placeHolder) ? sanitizeUrl(data || placeHolder, 'product') : null;
+    const src = !imgError && sanitizedSrc ? sanitizedSrc : fallback;
 
     return (
         <>
@@ -20,6 +21,7 @@ const Avatar = ({ data, placeHolder, name, customeClass, height, width, noPrevCl
                         width={width || 50}
                         alt={name?.name || ""}
                         onError={() => setImgError(true)}
+                        unoptimized={true}
                     />
                 </div>
             ) : NameWithRound ? (

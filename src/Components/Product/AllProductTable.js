@@ -45,8 +45,8 @@ const AllProductTable = ({ data, ...props }) => {
   };
   headerObj.data.map((element) => {
     element.sale_price = element?.sale_price;
-    // Fallback: if no dedicated thumbnail, use first gallery image
-    if (!element.product_thumbnail && element.product_galleries?.length > 0) {
+    // Fallback: if dedicated thumbnail is missing or just an ID (not an object), use first gallery image
+    if ((!element.product_thumbnail || typeof element.product_thumbnail !== 'object') && element.product_galleries?.length > 0) {
       element.product_thumbnail = element.product_galleries[0];
     }
   });
