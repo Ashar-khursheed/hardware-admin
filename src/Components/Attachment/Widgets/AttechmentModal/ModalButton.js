@@ -16,10 +16,11 @@ const ModalButton = ({ setModal, attachmentsData, dispatch, state, name, setSele
             }
         } else {
             if (multiple) {
-                value && value.map((element) => {
+                if (value && value.length > 0) {
                     state.selectedImage && setSelectedImage([...state.selectedImage]);
                     state.selectedImage && setFieldValue(name, state.selectedImage.map((elemmm) => elemmm.id));
-                });
+                    storeImageObject && setFieldValue(storeImageObject, [...state.selectedImage]);
+                }
             } else {
                 if (state?.selectedImage?.length > 0) {
                     if (showImage) {

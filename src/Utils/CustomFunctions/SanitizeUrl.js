@@ -1,8 +1,8 @@
 const S3_BASE = "https://hardware-website-images.s3.us-east-1.amazonaws.com";
 const S3_HOSTNAME = "hardware-website-images.s3.us-east-1.amazonaws.com";
 
-// Matches /storage/{id}/{filename} on any non-S3 host
-const STORAGE_PATTERN = /https?:\/\/(?!hardware-website-images\.s3)[^/]+\/storage\/(\d+)\/([^?#]+)/;
+// Matches /storage/{id}/{filename} or /{id}/{filename} on any non-S3 host
+const STORAGE_PATTERN = /https?:\/\/(?!hardware-website-images\.s3)[^/]+(?:\/storage)?\/(\d+)\/([^?#]+)/;
 
 /**
  * @param {string} url
@@ -23,26 +23,22 @@ export const sanitizeUrl = (data, type = 'other') => {
         return url.replace(/\\/g, '/').replace(/([^:]\/)\/+/g, "$1");
     }
 
-    // Rewrite /storage/{id}/{filename} or absolute storage URLs to S3
-    const match = url.match(STORAGE_PATTERN) || url.match(/\/storage\/(\d+)\/([^?#]+)/);
+    // Rewrite absolute storage URLs or relative /{id}/{filename} to S3
+    let match = url.match(STORAGE_PATTERN);
+    if (!match) {
+        // Fallback for relative paths: /storage/123/file.webp, /123/file.webp, or 123/file.webp
+        match = url.match(/^\/?(?:storage\/)?(\d+)\/([^?#]+)/);
+    }
+
     if (match) {
-        const id = match[match.length - 2];
-        const filename = match[match.length - 1];
+        const id = match[1];
+        const filename = match[2];
 
         // Only force /products/ prefix if we are sure it belongs there (legacy)
         // For new products, we should keep the ID-based path
         if (type === 'product' && !url.includes(`/${id}/`)) {
             return `${S3_BASE}/products/${filename}`;
         }
-        return `${S3_BASE}/${id}/${filename}`;
-    }
-
-    // Fallback for relative paths starting with /
-    if (url.startsWith('/storage/')) {
-        const parts = url.split('/');
-        const filename = parts[parts.length - 1];
-        const id = parts[parts.length - 2];
-        if (type === 'product' && !url.includes(`/${id}/`)) return `${S3_BASE}/products/${filename}`;
         return `${S3_BASE}/${id}/${filename}`;
     }
 
