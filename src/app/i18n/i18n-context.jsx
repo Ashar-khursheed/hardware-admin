@@ -10,14 +10,27 @@ import { getOptions } from "./settings";
 import request from "@/Utils/AxiosUtils";
 import Loader from "@/Components/CommonComponent/Loader";
 
+let translationCache = {};
+
 const loadResources = async (language, namespace) => {
-  try {
-    const response = await request({ url: `${process.env.API_PROD_URL}/translation/admin` }, false);
-    return response.data;
-  } catch (error) {
-    console.error("Error loading translations:", error);
-    return {};
+  if (translationCache[language]) {
+    return translationCache[language];
   }
+
+  translationCache[language] = (async () => {
+    try {
+      const response = await request({ url: `${process.env.API_PROD_URL}/translation/admin` }, false);
+      if (response && response.status === 200) {
+        return response.data || {};
+      }
+      return {};
+    } catch (error) {
+      console.error("Error loading translations:", error);
+      return {};
+    }
+  })();
+
+  return translationCache[language];
 };
 
 i18next

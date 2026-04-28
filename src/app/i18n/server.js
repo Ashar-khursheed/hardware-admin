@@ -8,15 +8,28 @@ import "server-only";
 import { fallbackLng, getOptions, languages } from "./settings";
 import request from "@/Utils/AxiosUtils";
 
+let translationCache = {};
+
 // Helper function to load translations dynamically
 const loadResources = async (language, namespace) => {
-  try {
-    const response = await request({ url: `${process.env.API_PROD_URL}/translation/admin` }, false);
-    return response.data;
-  } catch (error) {
-    console.error("Error loading translations:", error);
-    return null;
+  if (translationCache[language]) {
+    return translationCache[language];
   }
+
+  translationCache[language] = (async () => {
+    try {
+      const response = await request({ url: `${process.env.API_PROD_URL}/translation/admin` }, false);
+      if (response && response.status === 200) {
+        return response.data || null;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error loading translations:", error);
+      return null;
+    }
+  })();
+
+  return translationCache[language];
 };
 
 const initServerI18next = async (language, ns) => {
