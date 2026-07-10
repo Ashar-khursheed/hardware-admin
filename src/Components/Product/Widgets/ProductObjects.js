@@ -1,7 +1,9 @@
-import { descriptionSchema, discountSchema, dropDownScheme, ifTypeSimpleSchema, nameSchema, variationSchema, externalUrlSchema, watermarkImageSchema, ifSeparatorSchema,ifLicenseKeySchema, testSchema } from "../../../Utils/Validation/ValidationSchemas";
+import { descriptionSchema, discountSchema, dropDownScheme, ifTypeSimpleSchema, nameSchema, variationSchema, externalUrlSchema, watermarkImageSchema, ifSeparatorSchema, ifLicenseKeySchema, testSchema } from "../../../Utils/Validation/ValidationSchemas";
+import * as Yup from "yup";
 
 export const ProductValidationSchema = {
   name: nameSchema,
+  // schema: Yup.string().nullable(),
   short_description: nameSchema,
   description: descriptionSchema,
   stock_status: nameSchema,
@@ -13,7 +15,7 @@ export const ProductValidationSchema = {
   categories: dropDownScheme,
   tax_id: nameSchema,
   variations: variationSchema,
-  watermark_image_id:watermarkImageSchema,
+  watermark_image_id: watermarkImageSchema,
   // separator:ifSeparatorSchema,
   // license_key:ifLicenseKeySchema,
   wholesale_prices: testSchema
@@ -21,11 +23,11 @@ export const ProductValidationSchema = {
 
 export function ProductInitValues(oldData, updateId) {
   let separator = ",";
-  if(oldData?.separator == 'comma') {
+  if (oldData?.separator == 'comma') {
     separator = ",";
-  } else if(oldData?.separator == 'semicolon') {
+  } else if (oldData?.separator == 'semicolon') {
     separator = ";";
-  } else if(oldData?.separator == 'pipe') {
+  } else if (oldData?.separator == 'pipe') {
     separator = "|";
   }
   const attr_combination = () => {
@@ -45,14 +47,14 @@ export function ProductInitValues(oldData, updateId) {
   };
   return {
     // General
-    product_type:updateId ? oldData?.product_type || "" : "physical",
+    product_type: updateId ? oldData?.product_type || "" : "physical",
     store_id: updateId ? Number(oldData?.store_id) || "" : "",
     name: updateId ? oldData?.name || "" : "",
     slug: updateId ? oldData?.slug || "" : "",
     short_description: updateId ? oldData?.short_description || "" : "",
     description: updateId ? oldData?.description || "" : "",
-    tax_id :updateId ? Number(oldData?.tax_id) || "" : "",
-   // is_random_related_products: updateId ? oldData?.is_random_related_products || false : false,
+    tax_id: updateId ? Number(oldData?.tax_id) || "" : "",
+    // is_random_related_products: updateId ? oldData?.is_random_related_products || false : false,
 
     // Product Images
     product_thumbnail: updateId ? oldData?.product_thumbnail || "" : "",
@@ -61,14 +63,14 @@ export function ProductInitValues(oldData, updateId) {
     size_chart_image_id: updateId ? oldData?.size_chart_image?.id || "" : "",
     product_galleries: updateId ? oldData?.product_galleries?.map((img) => img) || "" : "",
     product_galleries_id: updateId ? oldData?.product_galleries?.map((elem) => elem.id) || "" : "",
-    watermark: updateId ?  oldData?.watermark ? false : false : false,
+    watermark: updateId ? oldData?.watermark ? false : false : false,
     watermark_position: updateId ? "center" : "center",
     watermark_image: updateId ? "" : "",
-    watermark_image_id: updateId ?  "" : "",
+    watermark_image_id: updateId ? "" : "",
     read_document: updateId ? oldData?.read_document?.id || "" : "",
     read_document: updateId ? oldData?.read_document || "" : "",
     read_document_id: updateId ? oldData?.read_document_id || "" : "",
-    read_button_text: updateId? oldData?.read_button_text : "",
+    read_button_text: updateId ? oldData?.read_button_text : "",
     // Inverntory  =>Type: Simple
     type: updateId ? oldData?.type || "" : "simple",
     stock_status: updateId ? oldData?.stock_status || "" : "in_stock",
@@ -77,13 +79,13 @@ export function ProductInitValues(oldData, updateId) {
     price: updateId ? oldData?.price || "" : "",
     discount: updateId ? oldData?.discount || "" : "",
     sale_price: updateId ? oldData?.sale_price || "" : "0.00",
-    wholesale_price_type : updateId ? oldData?.wholesale_price_type || "" : "",
+    wholesale_price_type: updateId ? oldData?.wholesale_price_type || "" : "",
     // wholesale_prices:  updateId ? oldData?.wholesales || [] : [{ id:"",min_qty: "", max_qty: "", value: "" }],
-    wholesale_prices:  updateId ? oldData?.wholesales || [] : [],
-    external_url:updateId ? oldData?.external_url || "" : "",
-    external_button_text :updateId ? oldData?.external_button_text || "" : "",
+    wholesale_prices: updateId ? oldData?.wholesales || [] : [],
+    external_url: updateId ? oldData?.external_url || "" : "",
+    external_button_text: updateId ? oldData?.external_button_text || "" : "",
     external_details: updateId ? oldData?.external_details || [] : [],
-   
+
     // Variation
     variations: updateId ? oldData?.variations : [],
     combination: updateId ? attr_combination() : [{}],
@@ -91,10 +93,10 @@ export function ProductInitValues(oldData, updateId) {
     attributes_ids: updateId ? oldData?.attributes?.map((elem) => elem.id) : [],
     // is_external: updateId ?  oldData?.is_external ? true : false :false,
     external_button_text: updateId ? oldData?.external_button_text : '',
-    external_url: updateId ? oldData?.external_url ?oldData?.external_url :"" : "",
+    external_url: updateId ? oldData?.external_url ? oldData?.external_url : "" : "",
     variation_image_id: "",
     is_digital: updateId ? oldData?.is_digital ? true : false : false,
-    digital_file_ids :updateId ? oldData?.digital_file_ids|| "" : "",
+    digital_file_ids: updateId ? oldData?.digital_file_ids || "" : "",
     // Digigtal Product
     is_licensable: updateId ? oldData?.is_licensable ? true : false : false,
     is_licensekey_auto: updateId ? oldData?.is_licensekey_auto ? true : false : false,
@@ -103,9 +105,9 @@ export function ProductInitValues(oldData, updateId) {
     license_key: updateId ? oldData?.license_keys?.map((value) => value?.license_key).join(separator) : "",
     // digital_file_id: updateId ? oldData?.digital_file_id || "" : "",
     preview_audio_file_id: updateId ? oldData?.preview_audio_file_id || "" : "",
-    preview_type:updateId ? oldData?.preview_type || "" : "url",
+    preview_type: updateId ? oldData?.preview_type || "" : "url",
     preview_video_file_id: updateId ? oldData?.preview_video_file_id || "" : "",
-    preview_url : updateId ? oldData?.preview_url || "" : "",
+    preview_url: updateId ? oldData?.preview_url || "" : "",
     // Setup
     is_sale_enable: updateId ? oldData?.is_sale_enable ? true : false : false,
     sale_starts_at: updateId ? oldData?.sale_starts_at || null : null,
@@ -113,16 +115,17 @@ export function ProductInitValues(oldData, updateId) {
     unit: updateId ? oldData?.unit || "" : "",
     tags: updateId ? oldData?.tags?.map((item) => item.id) || [] : [],
     categories: updateId ? oldData?.categories?.map((item) => item.id) || [] : [],
-    brand_id : updateId ? oldData?.brand_id : '',
+    brand_id: updateId ? oldData?.brand_id : '',
     is_random_related_products: updateId ? Boolean(Number(oldData?.is_random_related_products)) : true,
     related_products: updateId ? oldData?.related_products?.map((elem) => elem) || [] : [],
     cross_sell_products: updateId ? oldData?.cross_sell_products?.map((elem) => elem) || [] : [],
-    authors_id: updateId ? oldData?.authors_id?.map((item)=> item) || [] : [],
-    publication_id : updateId ? oldData?.publication_id : "",
+    authors_id: updateId ? oldData?.authors_id?.map((item) => item) || [] : [],
+    publication_id: updateId ? oldData?.publication_id : "",
 
     // SEO
     meta_title: updateId ? oldData?.meta_title || "" : "",
     meta_description: updateId ? oldData?.meta_description || "" : "",
+    schema: updateId ? oldData?.schema || "" : "",
     product_meta_image_id: updateId ? oldData?.product_meta_image_id?.id || "" : "",
     product_meta_image: updateId ? oldData?.product_meta_image || "" : "",
     // Shipping Tax

@@ -2,14 +2,13 @@ import { useTranslation } from "react-i18next";
 import FileUploadField from "../InputFields/FileUploadField";
 import SimpleInputField from "../InputFields/SimpleInputField";
 
-
-
 const SeoTab = ({ setFieldValue, values, updateId }) => {
-  
-  const { t } = useTranslation( 'common');
+  const { t } = useTranslation("common");
+
   return (
     <>
-      <SimpleInputField nameList={[{ name: "meta_title", placeholder: t("enter_meta_title") }, { name: "meta_description", placeholder: t("enter_meta_description"), type: "textarea" }]} />
+      <SimpleInputField nameList={[{ name: "meta_title", placeholder: t("enter_meta_title") }, { name: "meta_description", placeholder: t("enter_meta_description"), type: "textarea" }, { name: "schema", placeholder: "Enter JSON-LD schema", type: "textarea" }]} />
+
       <FileUploadField name="product_meta_image_id" title="meta_image" id="product_meta_image_id" type="file" values={values} setFieldValue={setFieldValue} updateId={updateId} />
     </>
   );

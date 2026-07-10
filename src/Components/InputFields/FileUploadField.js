@@ -84,10 +84,9 @@ const FileUploadField = ({ values, updateId, setFieldValue, errors, multiple, lo
   const buildImageUrl = (data) => {
     if (!data) return "";
 
-    // If it's an object with a full URL, use sanitizeUrl directly
-    const url = (data && typeof data === 'object') ? (data.asset_url || data.original_url) : data;
-    if (url && typeof url === 'string' && url.startsWith("http")) {
-      return sanitizeUrl(data);
+    const url = (data && typeof data === "object") ? (data.asset_url || data.original_url) : data;
+    if (url && typeof url === "string" && url.startsWith("http")) {
+      return sanitizeUrl(data) || url;
     }
 
     // Otherwise handle relative storage paths

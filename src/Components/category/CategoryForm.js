@@ -19,6 +19,7 @@ import LanguageRedirection from "../CommonComponent/LanguageRedirection";
 import { generateSlug } from "@/Utils/CustomFunctions/SlugName";
 import SettingContext from "@/Helper/SettingContext";
 import { ZoneApi } from "@/Utils/AxiosUtils/API";
+import DescriptionInput from "../Widgets/DescriptionInput";
 
 const CategoryForm = ({ mutate, updateId, loading, type, buttonName,language }) => {
   
@@ -43,8 +44,10 @@ const CategoryForm = ({ mutate, updateId, loading, type, buttonName,language }) 
       enableReinitialize
       initialValues={{
         name: updateId ? oldData?.data?.name || "" : "",
+        heading: updateId ? oldData?.data?.heading || "" : "",
         slug: updateId ? oldData?.data?.slug || "" : "",
         description: updateId ? oldData?.data?.description || "" : "",
+        content: updateId ? oldData?.data?.content || "" : "",
         category_image_id: updateId ? oldData?.data?.category_image?.id : "",
         meta_title: updateId ? oldData?.data?.meta_title || "" : "",
         meta_description: updateId ? oldData?.data?.meta_description || "" : "",
@@ -103,12 +106,25 @@ const CategoryForm = ({ mutate, updateId, loading, type, buttonName,language }) 
                 },
                 { name: "slug", placeholder: t("enter_slug"), value: values.slug, onChange: (e) => setFieldValue("slug", e.target.value)},
                 {
+                  name: "heading",
+                  title: "Page Heading (H1)",
+                  placeholder: "e.g. Buy Barcode Printers for Business Use",
+                  helpertext: "*Main heading (H1) shown at the top of the category page. Leave empty to use the category name.",
+                },
+                {
                   name: "description",
                   type:"textarea",
                   rows:"3",
                   placeholder: t("enter_category_description"),
                 },
               ]}
+            />
+            <DescriptionInput
+              values={values}
+              setFieldValue={setFieldValue}
+              title="Content"
+              nameKey="content"
+              helpertext="*Full category content shown when visitors click Show more."
             />
               {state?.zone_enable && (
               <> 

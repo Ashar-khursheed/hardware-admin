@@ -1,4 +1,6 @@
 import SettingContext from "@/Helper/SettingContext";
+import LanguageContext from "@/Helper/LanguageContext";
+import { fallbackLng } from "@/app/i18n/settings";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
@@ -14,6 +16,8 @@ const Options = ({ fullObj, mutate, type, moduleName, optionPermission, refetch,
   const pathname = usePathname();
   const [modal, setModal] = useState(false);
   const { settingObj } = useContext(SettingContext);
+  const { localLanguage } = useContext(LanguageContext);
+  const editLocale = lang || settingObj?.general?.default_language?.locale || localLanguage || fallbackLng;
   const [edit, destroy] = usePermissionCheck(["edit", "destroy"], keyInPermission ?? keyInPermission);
   return (
     <div className="custom-ul">
@@ -33,45 +37,21 @@ const Options = ({ fullObj, mutate, type, moduleName, optionPermission, refetch,
                 !optionPermission?.noEdit && (
                   <>
                   {optionPermission?.editRedirect ? (
-                    lang ? (
-                      <Link href={`/${optionPermission?.editRedirect}/${lang}/edit/${fullObj.id}`}>
+                      <Link href={`/${optionPermission?.editRedirect}/${editLocale}/edit/${fullObj.id}`}>
                         <RiPencilLine />
                       </Link>
-                    ) : (
-                      <Link href={`/${optionPermission?.editRedirect}/edit/${fullObj.id}`}>
-                        <RiPencilLine />
-                      </Link>
-                    )
                   ) : type === "post" && ['tag', 'blog/tag'].includes(moduleName?.toLowerCase()) ? (
-                    lang ? (
-                      <Link href={`/${pathname.split("/")[1]}/tag/${lang}/edit/${fullObj.id}`}>
+                      <Link href={`/${pathname.split("/")[1]}/tag/${editLocale}/edit/${fullObj.id}`}>
                         <RiPencilLine />
                       </Link>
-                    ) : (
-                      <Link href={`/${pathname.split("/")[1]}/tag/edit/${fullObj.id}`}>
-                        <RiPencilLine />
-                      </Link>
-                    )
                   ) : type === "post" ? (
-                    lang ? (
-                      <Link href={`/${pathname.split("/")[1]}/category/${lang}/edit/${fullObj.id}`}>
+                      <Link href={`/${pathname.split("/")[1]}/category/${editLocale}/edit/${fullObj.id}`}>
                         <RiPencilLine />
                       </Link>
-                    ) : (
-                      <Link href={`/${pathname.split("/")[1]}/category/edit/${fullObj.id}`}>
-                        <RiPencilLine />
-                      </Link>
-                    )
                   ) : (
-                    lang ? (
-                      <Link href={`/${pathname.split("/")[1]}/${lang}/edit/${fullObj.id}`}>
+                      <Link href={`/${pathname.split("/")[1]}/${editLocale}/edit/${fullObj.id}`}>
                         <RiPencilLine />
                       </Link>
-                    ) : (
-                      <Link href={`/${pathname.split("/")[1]}/edit/${fullObj.id}`}>
-                        <RiPencilLine />
-                      </Link>
-                    )
                   )}
                 </>
                 )

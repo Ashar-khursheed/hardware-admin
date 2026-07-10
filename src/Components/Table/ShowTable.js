@@ -1,5 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
+import LanguageContext from "@/Helper/LanguageContext";
+import { fallbackLng } from "@/app/i18n/settings";
 import { useTranslation } from "react-i18next";
 import { RiArrowDownSFill, RiArrowUpSFill, RiLock2Line } from "react-icons/ri";
 import { Rating } from "react-simple-star-rating";
@@ -15,7 +17,9 @@ import TableLoader from "./TableLoader";
 
 const ShowTable = ({ current_page, per_page, mutate, isCheck, setIsCheck, url, sortBy, setSortBy, headerData, fetchStatus, moduleName, type, redirectLink, refetch, keyInPermission, link,lang,language,extraActions }) => {
   const { t } = useTranslation("common");
-  const { convertCurrency } = useContext(SettingContext);
+  const { convertCurrency, settingObj } = useContext(SettingContext);
+  const { localLanguage } = useContext(LanguageContext);
+  const editLocale = lang || settingObj?.general?.default_language?.locale || localLanguage || fallbackLng;
   const [edit] = usePermissionCheck(["edit", "destroy"]);
   const [colSpann, setColSpann] = useState();
   const router = useRouter();
@@ -51,7 +55,7 @@ const ShowTable = ({ current_page, per_page, mutate, isCheck, setIsCheck, url, s
       if (headerData?.optionHead?.type == "View") {
         redirectLink ? redirectLink(tableData) : "";
       } else if (tableData.system_reserve !== "1" && headerData?.isOption) {
-        tableData?.id && (lang ? router.push(`/${moduleName.toLowerCase()}/${lang}/edit/${tableData.id}`): router.push(`/${moduleName.toLowerCase()}/edit/${tableData.id}`));
+        tableData?.id && router.push(`/${moduleName.toLowerCase()}/${editLocale}/edit/${tableData.id}`);
       }
     }
   };

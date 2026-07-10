@@ -58,12 +58,13 @@ const nextConfig = {
   },
 
   env: {
-    // Laravel API (Production)
-    API_PROD_URL: "https://hardware.sparccpk.org/api/admin",
+    // Laravel API (Production / Local Override)
+    API_PROD_URL: process.env.API_PROD_URL || "https://hardware.sparccpk.org/api/admin",
 
     // Storage base URL (NO trailing slash logic needed in frontend)
-    STORAGE_URL: "https://hardware.sparccpk.org",
+    STORAGE_URL: process.env.STORAGE_URL || "https://hardware.sparccpk.org",
   },
+
 
   redirects: async () => {
     return [
@@ -98,6 +99,12 @@ const nextConfig = {
         pathname: "/**",
       },
 
+      // CloudFront CDN — product images
+      {
+        protocol: "https",
+        hostname: "d3243ix3g2hwoc.cloudfront.net",
+        pathname: "/**",
+      },
       // S3 — product images (old uploads stored in /products/ prefix)
       {
         protocol: "https",
