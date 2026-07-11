@@ -21,7 +21,8 @@ const LoginHandle = (responseData, router, setShowBoxMessage, setCookie) => {
     }
     router.push("/");
   } else {
-    setShowBoxMessage(responseData.response.data.message);
+    const errorMsg = responseData?.response?.data?.message || responseData?.message || "Login failed. Please check your connection.";
+    setShowBoxMessage(errorMsg);
   }
 };
 

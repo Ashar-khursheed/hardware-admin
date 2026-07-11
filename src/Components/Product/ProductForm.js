@@ -54,7 +54,8 @@ const ProductForm = ({ mutate, updateId, title, buttonName, saveButton, setSaveB
           values["watermark_image_id"] = ""
         }
         if (!values["is_licensable"]) {
-          values["separator", "license_key"] = ""
+          values["separator"] = "";
+          values["license_key"] = "";
         }
         ProductSubmitFunction(mutate, values, updateId);
       }}>
@@ -71,12 +72,14 @@ const ProductForm = ({ mutate, updateId, title, buttonName, saveButton, setSaveB
                   <Col xl="3" lg="4">
                     <TabForProduct values={values} activeTab={activeTab} setActiveTab={setActiveTab} errors={errors} touched={touched} />
                   </Col>
-                  <AllProductTabs setErrors={setErrors} setTouched={setTouched} touched={touched} values={values} activeTab={activeTab} isSubmitting={isSubmitting} setFieldValue={setFieldValue} errors={errors} updateId={updateId} setActiveTab={setActiveTab} />
-                  <div className="ms-auto justify-content-end dflex-wgap mt-sm-4 mt-2 save-back-button">
-                    <Btn className="btn-outline" title="back" onClick={() => router.back()} />
-                    {updateId && <Btn className="btn-outline" type="submit" title={`save_and_continue`} onClick={() => setSaveButton(true)} />}
-                    <Btn className="btn-primary" type="submit" title={buttonName} onClick={() => setSaveButton && setSaveButton(false)} />
-                  </div>
+                  <Col xl="9" lg="8">
+                    <AllProductTabs setErrors={setErrors} setTouched={setTouched} values={values} setFieldValue={setFieldValue} errors={errors} updateId={updateId} activeTab={activeTab} isSubmitting={isSubmitting} setActiveTab={setActiveTab} touched={touched} />
+                    <div className="ms-auto justify-content-end dflex-wgap mt-sm-4 mt-2 save-back-button">
+                      <Btn className="btn-outline" title="back" onClick={() => router.back()} />
+                      {updateId && <Btn className="btn-outline" type="submit" title={`save_and_continue`} onClick={() => setSaveButton(true)} />}
+                      <Btn className="btn-primary" type="submit" title={buttonName} onClick={() => setSaveButton && setSaveButton(false)} />
+                    </div>
+                  </Col>
                 </Row>
               </Card>
             </Col>
