@@ -16,13 +16,13 @@ import { useRouter } from "next/navigation";
 import LanguageRedirection from "../CommonComponent/LanguageRedirection";
 import { generateSlug } from "@/Utils/CustomFunctions/SlugName";
 
-const BlogForm = ({ mutate, loading, updateId , buttonName, language}) => {
-  
-  const { t } = useTranslation( 'common');
-  const router =useRouter()
-  const { data } = useQuery([Category], () => request({ url: Category, params: { type: "post" } },router), { refetchOnWindowFocus: false, select: (data) => data.data.data });
-  const { data: tagData } = useQuery([tag], () => request({ url: tag, params: { type: "post" } },router), { refetchOnWindowFocus: false, select: (data) => data.data.data });
-  const { data: oldData, isLoading: oldDataLoading, refetch } = useQuery([blog + "/" + updateId], () => request({ url: `${blog}/${updateId}` },router), { enabled: false, refetchOnWindowFocus: false });
+const BlogForm = ({ mutate, loading, updateId, buttonName, language }) => {
+
+  const { t } = useTranslation('common');
+  const router = useRouter()
+  const { data } = useQuery([Category], () => request({ url: Category, params: { type: "post" } }, router), { refetchOnWindowFocus: false, select: (data) => data.data.data });
+  const { data: tagData } = useQuery([tag], () => request({ url: tag, params: { type: "post" } }, router), { refetchOnWindowFocus: false, select: (data) => data.data.data });
+  const { data: oldData, isLoading: oldDataLoading, refetch } = useQuery([blog + "/" + updateId], () => request({ url: `${blog}/${updateId}` }, router), { enabled: false, refetchOnWindowFocus: false });
   useEffect(() => {
     updateId && refetch();
   }, [updateId]);
@@ -36,6 +36,7 @@ const BlogForm = ({ mutate, loading, updateId , buttonName, language}) => {
           slug: updateId ? oldData?.data?.slug || "" : "",
           description: updateId ? oldData?.data?.description || "" : "",
           content: updateId ? oldData?.data?.content || "" : "",
+          schema: updateId ? oldData?.data?.schema || "" : "",
           meta_title: updateId ? oldData?.data?.meta_title || "" : "",
           meta_description: updateId ? oldData?.data?.meta_description || "" : "",
           blog_meta_image_id: updateId ? oldData?.data?.blog_meta_image?.id || "" : "",
@@ -64,33 +65,45 @@ const BlogForm = ({ mutate, loading, updateId , buttonName, language}) => {
           mutate(values);
         }}>
         {({ values, setFieldValue, errors, touched }) => {
-            useEffect(() => {
-              if (values.title && !updateId && !values.slug) {
+          useEffect(() => {
+            if (values.title && !updateId && !values.slug) {
               setFieldValue("slug", generateSlug(values.title));
-              }
+            }
           }, [values.title, setFieldValue, updateId, values.slug]);
-          return(
-          <>
-            <Form id="blog" className="theme-form theme-form-2 mega-form">
-            {updateId && <LanguageRedirection id={updateId} path={'/blog'} language={language}/>}
-            <SimpleInputField nameList={[
-                { name: "title", placeholder: t("enter_blog_title"), require: "true", value: values.title, onChange: (e) => {setFieldValue("title", e.target.value); if (!updateId) { setFieldValue("slug", generateSlug(e.target.value));}},},
-                { name: "slug", placeholder: t("enter_slug"), value: values.slug, onChange: (e) => setFieldValue("slug", e.target.value)},
+          return (
+            <>
+              <Form id="blog" className="theme-form theme-form-2 mega-form">
+                {updateId && <LanguageRedirection id={updateId} path={'/blog'} language={language} />}
+                <SimpleInputField nameList={[
+                  { name: "title", placeholder: t("enter_blog_title"), require: "true", value: values.title, onChange: (e) => { setFieldValue("title", e.target.value); if (!updateId) { setFieldValue("slug", generateSlug(e.target.value)); } }, },
+                  { name: "slug", placeholder: t("enter_slug"), value: values.slug, onChange: (e) => setFieldValue("slug", e.target.value) },
                 ]} />
-              <SimpleInputField nameList={[{ name: "description", placeholder: t("enter_blog_description") }]} />
-              <DescriptionInput values={values} setFieldValue={setFieldValue} title={'Content'} nameKey="content" />
-              <FileUploadField name="blog_thumbnail_id" title='thumbnail' require='true' id="blog_thumbnail_id" updateId={updateId} type="file" values={values} setFieldValue={setFieldValue} errors={errors} touched={touched} helpertext={getHelperText("1500x700px")} />
-              <MultiSelectField errors={errors} values={values} setFieldValue={setFieldValue} name="categories" data={data} require='true' />
-              <MultiSelectField errors={errors} values={values} setFieldValue={setFieldValue} name="tags" data={tagData} />
-              <CheckBoxField name="is_featured" title="featured" />
-              <CheckBoxField name="is_sticky" title="sticky" />
-              <SimpleInputField nameList={[{ name: "meta_title", placeholder: t("enter_meta_title") }, { name: "meta_description", placeholder: t("enter_meta_description"), type: 'textarea' }]} />
-              <FileUploadField name="blog_meta_image_id" title='meta_image' id="blog_meta_image_id" updateId={updateId} type="file" values={values} setFieldValue={setFieldValue} errors={errors} touched={touched} />
-              <CheckBoxField name="status" />
-              <FormBtn loading={Number(loading)} buttonName={buttonName} />
-            </Form>
-          </>
-        )}}
+                <SimpleInputField nameList={[{ name: "description", placeholder: t("enter_blog_description") }]} />
+                <DescriptionInput values={values} setFieldValue={setFieldValue} title={'Content'} nameKey="content" />
+                <FileUploadField name="blog_thumbnail_id" title='thumbnail' require='true' id="blog_thumbnail_id" updateId={updateId} type="file" values={values} setFieldValue={setFieldValue} errors={errors} touched={touched} helpertext={getHelperText("1500x700px")} />
+                <MultiSelectField errors={errors} values={values} setFieldValue={setFieldValue} name="categories" data={data} require='true' />
+                <MultiSelectField errors={errors} values={values} setFieldValue={setFieldValue} name="tags" data={tagData} />
+                <CheckBoxField name="is_featured" title="featured" />
+                <CheckBoxField name="is_sticky" title="sticky" />
+                <SimpleInputField nameList={[{ name: "meta_title", placeholder: t("enter_meta_title") }, { name: "meta_description", placeholder: t("enter_meta_description"), type: 'textarea' }]} />
+                <FileUploadField name="blog_meta_image_id" title='meta_image' id="blog_meta_image_id" updateId={updateId} type="file" values={values} setFieldValue={setFieldValue} errors={errors} touched={touched} />
+                <SimpleInputField
+                  nameList={[
+                    {
+                      name: "schema",
+                      title: "Schema (JSON-LD)",
+                      placeholder: "Enter Blog Schema JSON-LD",
+                      type: "textarea",
+                      rows: 8,
+                    }
+                  ]}
+                />
+                <CheckBoxField name="status" />
+                <FormBtn loading={Number(loading)} buttonName={buttonName} />
+              </Form>
+            </>
+          )
+        }}
       </Formik>
     </>
   );
