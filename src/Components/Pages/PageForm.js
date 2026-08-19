@@ -15,11 +15,11 @@ import { useRouter } from 'next/navigation';
 import LanguageRedirection from '../CommonComponent/LanguageRedirection';
 import { generateSlug } from '@/Utils/CustomFunctions/SlugName';
 
-const PageForm = ({ updateId, mutate, loading, buttonName,language }) => {
-    
-    const { t } = useTranslation( 'common');
+const PageForm = ({ updateId, mutate, loading, buttonName, language }) => {
+
+    const { t } = useTranslation('common');
     const router = useRouter()
-    const { data: oldData, isLoading, refetch } = useQuery([`page/id`], () => request({ url: `${PagesAPI}/${updateId}` },router), { enabled: false, select: (data) => data?.data });
+    const { data: oldData, isLoading, refetch } = useQuery([`page/id`], () => request({ url: `${PagesAPI}/${updateId}` }, router), { enabled: false, select: (data) => data?.data });
     useEffect(() => {
         updateId && refetch();
     }, [updateId]);
@@ -45,27 +45,102 @@ const PageForm = ({ updateId, mutate, loading, buttonName,language }) => {
                 mutate(values);
             }}>
             {({ values, setFieldValue, errors, touched }) => {
-                 useEffect(() => {
+                useEffect(() => {
                     if (values.title && !updateId && !values.slug) {
-                    setFieldValue("slug", generateSlug(values.title));
+                        setFieldValue("slug", generateSlug(values.title));
                     }
                 }, [values.title, setFieldValue, updateId, values.slug]);
-                return(
-                <>
-                    <Form id="blog" className="theme-form theme-form-2 mega-form">
-                        {updateId && <LanguageRedirection id={updateId} path={'/page'} language={language}/>}
-                        <SimpleInputField nameList={[
-                            { name: "title", placeholder: t("enter_title"), require: "true", value: values.title, onChange: (e) => {setFieldValue("title", e.target.value); if (!updateId) { setFieldValue("slug", generateSlug(e.target.value));}},},
-                            { name: "slug", placeholder: t("enter_slug"), value: values.slug, onChange: (e) => setFieldValue("slug", e.target.value)},
+                return (
+                    <>
+                        {/* <Form id="blog" className="theme-form theme-form-2 mega-form">
+                            {updateId && <LanguageRedirection id={updateId} path={'/page'} language={language} />}
+                            <SimpleInputField nameList={[
+                                { name: "title", placeholder: t("enter_title"), require: "true", value: values.title, onChange: (e) => { setFieldValue("title", e.target.value); if (!updateId) { setFieldValue("slug", generateSlug(e.target.value)); } }, },
+                                { name: "slug", placeholder: t("enter_slug"), value: values.slug, onChange: (e) => setFieldValue("slug", e.target.value) },
                             ]} />
-                        <DescriptionInput values={values} setFieldValue={setFieldValue} title={'Content'} nameKey="content" />
-                        <SimpleInputField nameList={[{ name: "meta_title", title: "meta_title", placeholder: t("enter_title") }, { name: "meta_description", title: "meta_description", placeholder: t("enter_description") }]} />
-                        <FileUploadField name="page_meta_image_id" title='meta_image' id="page_meta_image_id" updateId={updateId} type="file" values={values} setFieldValue={setFieldValue} errors={errors} touched={touched} />
-                        <CheckBoxField name="status" />
-                        <FormBtn loading={Number(loading)} buttonName={buttonName}/>
-                    </Form>
-                </>
-            )}}
+                            <DescriptionInput values={values} setFieldValue={setFieldValue} title={'Content'} nameKey="content" />
+                            <SimpleInputField nameList={[{ name: "meta_title", title: "meta_title", placeholder: t("enter_title") }, { name: "meta_description", title: "meta_description", placeholder: t("enter_description") }]} />
+                            <FileUploadField name="page_meta_image_id" title='meta_image' id="page_meta_image_id" updateId={updateId} type="file" values={values} setFieldValue={setFieldValue} errors={errors} touched={touched} />
+                            <CheckBoxField name="status" />
+                            <FormBtn loading={Number(loading)} buttonName={buttonName} />
+                        </Form> */}
+
+                        <Form id="blog" className="theme-form theme-form-2 mega-form">
+                            {updateId && <LanguageRedirection id={updateId} path={'/page'} language={language} />}
+
+                            <SimpleInputField
+                                nameList={[
+                                    {
+                                        name: "title",
+                                        placeholder: t("enter_title"),
+                                        require: "true",
+                                        value: values.title,
+                                        onChange: (e) => {
+                                            setFieldValue("title", e.target.value);
+
+                                            if (!updateId) {
+                                                setFieldValue("slug", generateSlug(e.target.value));
+                                            }
+                                        },
+                                    },
+                                    {
+                                        name: "slug",
+                                        placeholder: t("enter_slug"),
+                                        value: values.slug,
+                                        onChange: (e) => setFieldValue("slug", e.target.value)
+                                    },
+                                ]}
+                            />
+
+                            <DescriptionInput
+                                values={values}
+                                setFieldValue={setFieldValue}
+                                title={'Content'}
+                                nameKey="content"
+                            />
+
+                            <SimpleInputField
+                                nameList={[
+                                    {
+                                        name: "meta_title",
+                                        title: "meta_title",
+                                        placeholder: t("enter_title")
+                                    },
+                                    {
+                                        name: "meta_description",
+                                        title: "meta_description",
+                                        placeholder: t("enter_description")
+                                    },
+                                    {
+                                        name: "schema",
+                                        title: "schema",
+                                        placeholder: "Enter JSON-LD schema"
+                                    }
+                                ]}
+                            />
+
+                            <FileUploadField
+                                name="page_meta_image_id"
+                                title='meta_image'
+                                id="page_meta_image_id"
+                                updateId={updateId}
+                                type="file"
+                                values={values}
+                                setFieldValue={setFieldValue}
+                                errors={errors}
+                                touched={touched}
+                            />
+
+                            <CheckBoxField name="status" />
+
+                            <FormBtn
+                                loading={Number(loading)}
+                                buttonName={buttonName}
+                            />
+                        </Form>
+                    </>
+                )
+            }}
         </Formik>
     )
 }

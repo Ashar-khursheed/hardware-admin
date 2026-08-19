@@ -4,12 +4,18 @@ import { BiCheckShield, BiError } from "react-icons/bi";
 const ShowBox = ({ showBoxMessage }) => {
   const { t } = useTranslation("common");
   if (!showBoxMessage) return null;
+
+  // Safely handle both string and object error payloads
+  const isObject = typeof showBoxMessage === "object";
+  const message = isObject ? showBoxMessage.message : showBoxMessage;
+  const isSuccess = isObject && showBoxMessage.type === "success";
+
   return (
-    <div className={showBoxMessage ? "error-box" : "success-box"}>
-      {showBoxMessage ? <BiError /> : <BiCheckShield />}
+    <div className={isSuccess ? "success-box" : "error-box"}>
+      {isSuccess ? <BiCheckShield /> : <BiError />}
       <div>
-        <h4>{showBoxMessage ? t("ThereWasAProblem") : t("Success")} </h4>
-        <p>{t(showBoxMessage)}</p>
+        <h4>{isSuccess ? t("Success") : t("ThereWasAProblem")}</h4>
+        <p>{t(message)}</p>
       </div>
     </div>
   );
