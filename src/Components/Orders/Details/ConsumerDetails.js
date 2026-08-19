@@ -44,12 +44,19 @@ const ConsumerDetails = ({ data }) => {
                                 </h4>
                             </li>
                         }
-                        {!data?.is_digital_only &&
-                            <li>
-                                <label>{t("delivery_slot")}:</label>
-                                <h4>{data?.delivery_description}</h4>
-                            </li>
-                        }
+                        {!data?.is_digital_only && (
+                            <>
+                                <li>
+                                    <label>{t("Shipping Method")}:</label>
+                                    <h4>{data?.delivery_description || 'Standard Shipping'}</h4>
+                                </li>
+                                <li>
+                                    <label>{t("Shipping Cost")}:</label>
+                                    <h4>{data?.shipping_total ? `$${Number(data.shipping_total).toFixed(2)}` : '$0.00'}</h4>
+                                </li>
+                            </>
+                        )}
+
                         <li>
                             <label>{t("Payment Mode")}:</label>
                             <h4>{data?.payment_method?.toUpperCase()}</h4>

@@ -20,6 +20,8 @@ const AllOrdersTable = ({ data, ...props }) => {
             { title: "order_number", apiKey: "order_number" },
             { title: "order_date", apiKey: "created_at", sorting: true, sortBy: "desc", type: "date" },
             { title: "customer_name", apiKey: "consumer", subKey: ["name"] },
+            { title: "shipping_cost", apiKey: "shipping_total", type: 'price' },
+            { title: "shipping_method", apiKey: "delivery_description" },
             { title: "total_amount", apiKey: "total", type: 'price' },
             { title: "payment_status", apiKey: "payment_status" },
             { title: "Payment Mode", apiKey: "payment_method" }
@@ -32,9 +34,11 @@ const AllOrdersTable = ({ data, ...props }) => {
             element.payment_status = element.payment_status ? <div className={`status-${element?.payment_status?.toString()?.toLowerCase() || ''}`}><span>{element?.payment_status}</span></div> : '-';
             element.payment_mode = element.payment_method ? <div className="payment-mode"><span>{element?.payment_method}</span></div> : '-';
             element.consumer_name = <span className="text-capitalize">{element?.consumer?.name}</span>;
+            element.delivery_description = <span className="badge bg-light text-dark border">{element?.delivery_description || 'Standard'}</span>;
             return element;
         });
     }, [headerObj?.data]);
+
     headerObj.data = headerObj ? orders : [];
 
     const redirectLink = (data) => {
