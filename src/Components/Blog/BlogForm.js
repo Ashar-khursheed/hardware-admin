@@ -43,6 +43,7 @@ const BlogForm = ({ mutate, loading, updateId, buttonName, language }) => {
           blog_meta_image: updateId ? oldData?.data?.blog_meta_image || "" : "",
           blog_thumbnail_id: updateId ? oldData?.data?.blog_thumbnail?.id || "" : undefined,
           blog_thumbnail: updateId ? oldData?.data?.blog_thumbnail || "" : "",
+          thumbnail_alt: updateId ? oldData?.data?.thumbnail_alt || "" : "",
           categories: updateId ? oldData?.data?.categories.map((item) => item.id) || [] : [],
           tags: updateId ? oldData?.data?.tags.map((item) => item.id) || [] : [],
           is_featured: updateId ? Boolean(Number(oldData?.data?.is_featured)) : true,
@@ -81,6 +82,16 @@ const BlogForm = ({ mutate, loading, updateId, buttonName, language }) => {
                 <SimpleInputField nameList={[{ name: "description", placeholder: t("enter_blog_description") }]} />
                 <DescriptionInput values={values} setFieldValue={setFieldValue} title={'Content'} nameKey="content" />
                 <FileUploadField name="blog_thumbnail_id" title='thumbnail' require='true' id="blog_thumbnail_id" updateId={updateId} type="file" values={values} setFieldValue={setFieldValue} errors={errors} touched={touched} helpertext={getHelperText("1500x700px")} />
+                <SimpleInputField
+                  nameList={[
+                    {
+                      name: "thumbnail_alt",
+                      placeholder: t("enter_thumbnail_alt_text"),
+                      title: "thumbnail_alt_text",
+                      value: values.thumbnail_alt,
+                    }
+                  ]}
+                />
                 <MultiSelectField errors={errors} values={values} setFieldValue={setFieldValue} name="categories" data={data} require='true' />
                 <MultiSelectField errors={errors} values={values} setFieldValue={setFieldValue} name="tags" data={tagData} />
                 <CheckBoxField name="is_featured" title="featured" />
