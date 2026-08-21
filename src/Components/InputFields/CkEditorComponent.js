@@ -4,12 +4,39 @@ import { RiCodeSSlashLine, RiEditBoxLine } from "react-icons/ri";
 import SimpleInputField from "./SimpleInputField";
 import { ErrorMessage } from "formik";
 
+class MyUploadAdapter {
+  constructor(loader) {
+    this.loader = loader;
+  }
+  upload() {
+    return this.loader.file.then(
+      (file) =>
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            resolve({ default: reader.result });
+          };
+          reader.onerror = (err) => reject(err);
+          reader.readAsDataURL(file);
+        })
+    );
+  }
+  abort() {}
+}
+
+function MyCustomUploadAdapterPlugin(editor) {
+  editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+    return new MyUploadAdapter(loader);
+  };
+}
+
 function CkEditorComponent({ onChange, editorLoaded, name, value, values ,errorMessage}) {
   const [isCodeEditor, setIsCodeEditor] = useState(true);
 
   const { t } = useTranslation("common");
   const [editor, setEditor] = useState(null);
   const customConfig = {
+    extraPlugins: [MyCustomUploadAdapterPlugin],
     toolbar: {
       items: ["bold", "italic", "|", "heading", "|", "link", "imageUpload", "|", "fontColor", "fontBackgroundColor"],
     },
